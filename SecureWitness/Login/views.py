@@ -10,11 +10,11 @@ from django.contrib.auth.models import User, Group
 def index(request):
 	if request.method == 'POST':
 		form = LoginForm(request.POST)
-		if form.is_valid():
+		if 'Register' in request.POST:
+			return HttpResponseRedirect('/Login/Register')
+		elif form.is_valid():
 			if 'Login' in request.POST:
 				return HttpResponseRedirect('/test/')
-			else:
-				return HttpResponseRedirect('/Login/Register')
 	else:
 		form = LoginForm()
 	return render(request,'Login/index.html', {'form':form})
@@ -22,16 +22,17 @@ def index(request):
 def register(request):
 	if request.method == 'POST':
 		form = RegisterForm(request.POST)
-		user = User.objects.create_user(form['username'].value(), form['usremail'].value(), form['usrpass'].value())
-		if form['reporter'].value():
-			g = Group.objects.get(name='Reporter')
-			g.user_set.add(user)
-		else:	
-			g = Group.objects.get(name='Reporter')
-			g.user_set.add(user)
-		user.save()
 		if form.is_valid():
-			return HttpResponseRedirect('/test/')
+			user = User.objects.create_user(form['username'].value(), form['usremail'].value(), form['usrpass'].value())
+			if form['reporter'].value():
+				g = Group.objects.get(name='Reporter')
+				g.user_set.add(user)
+			else:	
+				g = Group.objects.get(name='Reporter')
+				g.user_set.add(user)
+			user.save()
+			if form.is_valid():
+				return HttpResponseRedirect('/test/')
 	else:
 		form = RegisterForm()
 	return render(request, 'Register/index.html', {'form':form})

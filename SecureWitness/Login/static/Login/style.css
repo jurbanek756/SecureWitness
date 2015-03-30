@@ -1,12 +1,12 @@
-@import url(http://fonts.googleapis.com/css?family=Roboto:400,100);
+@import url(http://fonts.googleapis.com/css?family=Orbitron);
 
 body {
-  background: url(https://dl.dropboxusercontent.com/u/23299152/Wallpapers/wallpaper-22705.jpg) no-repeat center center fixed; 
+  background: url(http://www.wallpaperup.com/uploads/wallpapers/2012/08/06/9624/big_thumb_2aed53f0b01012c5225eec486360184c.jpg) no-repeat center top fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Orbitron', sans-serif;
 }
 
 .login-card {
@@ -27,12 +27,14 @@ body {
 
 .login-card input[type=submit] {
   width: 100%;
+  font-size: 16px;
+  font-family: 'Orbitron', sans-serif;
   display: block;
   margin-bottom: 10px;
   position: relative;
 }
 
-.login-card input[type=text], input[type=password] {
+.login-card input[type=text], input[type=password] , input[type=email]{
   height: 44px;
   font-size: 16px;
   width: 100%;
@@ -47,7 +49,7 @@ body {
   -moz-box-sizing: border-box;
 }
 
-.login-card input[type=text]:hover, input[type=password]:hover {
+.login-card input[type=text]:hover, input[type=password]:hover , input[type=email]:hover{
   border: 1px solid #b9b9b9;
   border-top: 1px solid #a0a0a0;
   -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
@@ -58,7 +60,7 @@ body {
 .login {
   text-align: center;
   font-size: 14px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   height: 36px;
   padding: 0 8px;

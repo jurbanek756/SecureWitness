@@ -1,7 +1,32 @@
-<form method="post">
-	{% csrf_token %}
-	{{ form.as_p }}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>Login</title>
+
+  <link rel='stylesheet' href='http://codepen.io/assets/libs/fullpage/jquery-ui.css'>
+    {% load staticfiles %}
+    <link rel="stylesheet" type "text/css" href="{% static 'Login/style.css' %}"/>
+
+</head>
+
+<body>
+
+  <div class="login-card">
+    <h1>Register</h1><br>
+		<form method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
 	
-	<input type="submit" name="Login" value="Login" />
-	<input type="submit" name="Register" value="Register" />
+		<input type="submit" name="Login" value="Login" />
+		<input type="submit" name="Register" value="Register" />
 </form>
+
+</div>
+
+</body>
+
+</html>
