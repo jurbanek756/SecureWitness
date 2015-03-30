@@ -1,6 +1,5 @@
 # 3240_team16
-Making the project work in your environment
-===========================================
+###Making the project work in your environment
 
 ```
 $ git clone https://github.com/mjtesema/3240_team16.git
@@ -15,4 +14,4 @@ $ git clone https://github.com/mjtesema/3240_team16.git
 $ python3 manage.py runserver
 ```
 
-and view the app in a local web browser at (http://127.0.0.1:8000)[127.0.0.1:8000]
+and view the app in a local web browser at http://127.0.0.1:8000
