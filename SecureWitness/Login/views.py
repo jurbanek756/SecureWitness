@@ -5,6 +5,8 @@ from django.core.context_processors import csrf
 from .forms import LoginForm
 from .forms import RegisterForm
 from django.contrib.auth.models import User, Group
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
 
 
 def index(request):
@@ -14,7 +16,16 @@ def index(request):
 			return HttpResponseRedirect('/Login/Register')
 		elif form.is_valid():
 			if 'Login' in request.POST:
-				return HttpResponseRedirect('/test/')
+				username = request.POST['user']
+				password = request.POST['usrpass']
+				user = authenticate(username = username, password = password)
+				if user is not None and user.is_active:
+					login(request, user)
+					return HttpResponseRedirect('/test/')
+				else:
+					messages.error(request, 'Incorrect Authorization')
+			else:	
+				print("Invalid login")
 	else:
 		form = LoginForm()
 	return render(request,'Login/index.html', {'form':form})
