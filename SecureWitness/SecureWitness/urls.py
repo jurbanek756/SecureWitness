@@ -8,7 +8,7 @@ urlpatterns = patterns('',
     url(r'^$', include('Login.urls'), name='Login'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^Login/', include('Login.urls')),
-    url(r'^Register/', include('Login.urls'))
+    url(r'^Register/', 'Login.views.register', name='register'),
 
 
 )

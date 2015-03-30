@@ -13,7 +13,7 @@ def index(request):
 	if request.method == 'POST':
 		form = LoginForm(request.POST)
 		if 'Register' in request.POST:
-			return HttpResponseRedirect('/Login/Register')
+			return HttpResponseRedirect('/Register/')
 		elif form.is_valid():
 			if 'Login' in request.POST:
 				username = request.POST['user']
@@ -39,7 +39,7 @@ def register(request):
 				g = Group.objects.get(name='Reporter')
 				g.user_set.add(user)
 			else:	
-				g = Group.objects.get(name='Reporter')
+				g = Group.objects.get(name='Users')
 				g.user_set.add(user)
 			user.save()
 			if form.is_valid():
