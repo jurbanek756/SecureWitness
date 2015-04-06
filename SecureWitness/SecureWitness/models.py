@@ -14,7 +14,12 @@ class Report(models.Model):
     private = models.BooleanField()
     group = models.ForeignKey(Custom_Group)
     author = models.ForeignKey(Custom_User)
+    objects = ReportManager()
 
+class ReportManager(models.Manager):
+    def create_report(self, report_title, author, pub_date, report_text_short):
+        report = self.create(report_title = report_title, author = author, pub_date = pub_date, report_text_short = report_text_short)
+        return report
 
 class Custom_Group(models.Model, Group):
     group_name = models.CharField(max_length=50)
