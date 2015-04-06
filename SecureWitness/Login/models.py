@@ -19,8 +19,8 @@ class Report(models.Model):
     report_text_long = models.CharField(max_length=200)
     location = models.CharField(max_length=100)
     incident_date = models.DateTimeField()
-    keyword_list = []
-    private = models.BooleanField()
+    keyword_list = models.CharField(max_length=100)
+    private = models.BooleanField(default=False)
     # group = models.ForeignKey(Custom_Group)
     # author = models.ForeignKey(Custom_User)
     objects = ReportManager()

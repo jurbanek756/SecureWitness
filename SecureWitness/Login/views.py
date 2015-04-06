@@ -4,12 +4,9 @@ from django.template import loader
 from django.core.context_processors import csrf
 from .forms import LoginForm
 from .forms import RegisterForm
-<<<<<<< HEAD
 from .models import ReportManager, Report
 from .forms import ReportForm
-=======
 from SecureWitness.models import CustomUser, Report
->>>>>>> abc263547733fb1109379906ae6a1e18fd463e26
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
@@ -23,27 +20,6 @@ def welcome(request):
 
 
 def index(request):
-<<<<<<< HEAD
-	if request.method == 'POST':
-		form = LoginForm(request.POST)
-		if 'Register' in request.POST:
-			return HttpResponseRedirect('/Register/')
-		elif form.is_valid():
-			if 'Login' in request.POST:
-				username = request.POST['user']
-				password = request.POST['usrpass']
-				user = authenticate(username = username, password = password)
-				if user is not None and user.is_active:
-					login(request, user)
-					return HttpResponseRedirect('/Report/')
-				else:
-					messages.error(request, 'Incorrect Authorization')
-			else:	
-				print("Invalid login")
-	else:
-		form = LoginForm()
-	return render(request,'Login/index.html', {'form':form})
-=======
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if 'Register' in request.POST:
@@ -63,7 +39,7 @@ def index(request):
     else:
         form = LoginForm()
     return render(request,'Login/index.html', {'form':form})
->>>>>>> abc263547733fb1109379906ae6a1e18fd463e26
+
 
 def register(request):
     if request.method == 'POST':
