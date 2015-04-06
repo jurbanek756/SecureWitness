@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Welcome!</title>
+</head>
+<body>
+<p><input type="submit" value="Admin" /></p>
+{% for report in latest_report_list %}
+    Report:
+        <pre>{{ report }}</pre>
+    {% endfor %}
+</body>
+</html>
