@@ -26,6 +26,12 @@ class CustomUser(AbstractBaseUser):
     def __str__(self):
         return self.name
 
+class ReportManager(models.Manager):
+    def create_report(self, report_title, author, pub_date, report_text_short):
+        report = self.create(report_title = report_title, author = author, pub_date = pub_date, report_text_short = report_text_short)
+        return report
+
+
 
 class Report(models.Model):
     # file support to be added
@@ -35,12 +41,15 @@ class Report(models.Model):
     report_text_long = models.TextField()
     location = models.CharField(max_length=100)
     incident_date = models.DateTimeField()
-    keywords = models.CharField(max_length=100)
+
+    objects = ReportManager()
+    keyword_list = models.CharField(max_length=100)
     private = models.BooleanField(default=False)
     group = models.ForeignKey(Group)
     author = models.ForeignKey(CustomUser)
     def __str__(self):
-        string="{"+ self.report_title + " by "+self.author.name+ "\n"+ self.report_text_short + "\n"+ self.pub_date.__str__()+ "\n" + self.report_text_long + "\n" + self.location + "\n" + self.incident_date.__str__() + "\n" + self.keywords + "\n" + "Private: " + self.private.__str__() + "\n"+ self.group.__str__()+ "}"
+        string="{"+ self.report_title + " by "+self.author.name+ "\n"+ self.report_text_short + "\n"+ self.pub_date.__str__()+ "\n" + self.report_text_long + "\n" + self.location + "\n" + self.incident_date.__str__() + "\n" + self.keyword_list + "\n" + "Private: " + self.private.__str__() + "\n"+ self.group.__str__()+ "}"
         return string
+
 
 

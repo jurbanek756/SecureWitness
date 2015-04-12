@@ -4,6 +4,8 @@ from django.template import loader
 from django.core.context_processors import csrf
 from .forms import LoginForm
 from .forms import RegisterForm
+from .models import ReportManager, Report
+from .forms import ReportForm
 from SecureWitness.models import CustomUser, Report
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login
@@ -38,6 +40,7 @@ def index(request):
         form = LoginForm()
     return render(request,'Login/index.html', {'form':form})
 
+
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -59,3 +62,13 @@ def register(request):
         form = RegisterForm()
     return render(request, 'Register/index.html', {'form':form})
 # Create your views here.
+
+def report(request):
+    if request.method == 'POST':
+        form = ReportForm(request.POST)
+        if form.is_valid():
+            form = Report.objects.create_report(form['report_title'].value(), form['author'].value(),
+                                                form['pub_date'].value(), form['report_text_short'].value())
+    else:
+        form = ReportForm()
+    return render(request, 'Report/report.html', {'form':form})
