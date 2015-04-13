@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>User_directory</title>
+</head>
+<body>
+    {% for user in user_list %}
+            {{ user }}:
+        <p><li><a href="Ban_users/">Ban user</a></li></p>
+        <p><li><a href="Add_to_Group/">Add to Group</a></li></p>
+        <p><li><a href="Make_admins/">Make admin</a></li></p>
+{% endfor %}
+</body>
+</html>

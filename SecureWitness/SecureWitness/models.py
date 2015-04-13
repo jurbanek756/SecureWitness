@@ -4,22 +4,25 @@ from django.contrib.auth.models import AbstractBaseUser, Group, BaseUserManager
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, givenEmail, reporter, givenPass='wahoowah' ):
         email = self.normalize_email(givenEmail)
-        user = self.model(name=username, email=email, groups=Group.objects.get(name='Users'), password= givenPass, admin=False,reporter=reporter)
+        user = self.model(name=username, email=email, reporter=reporter, groups=Group.objects.get(name='Users'), password= givenPass, admin=False)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, givenEmail, reporter, givenPass='wahoowah' ):
-        email = self.normalize_email(givenEmail)
-        user = self.model(name=username, email=email, password= givenPass, admin=True,reporter=reporter)
+    def create_superuser(self, username, given_email, reporter, given_pass='wahoowah'  ):
+        email = self.normalize_email(given_email)
+        user = self.model(name=username, email=email, reporter=reporter, groups=Group.objects.get(name='Users'), password= given_pass, is_staff= True,  admin=True)
         user.save(using=self._db)
         return user
+
+
 
 
 class CustomUser(AbstractBaseUser):
     admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
     reporter = models.BooleanField(default=False)
-    name = models.CharField(max_length=20)
-    groups= models.ForeignKey(Group)
+    name = models.CharField(max_length=20, unique=True)
+    groups= models.ForeignKey(Group, null=True)
     objects= CustomUserManager()
     email = models.CharField(max_length=50, default= 'none')
     USERNAME_FIELD = 'name'
@@ -43,7 +46,7 @@ class Report(models.Model):
     incident_date = models.DateTimeField()
 
     objects = ReportManager()
-    keyword_list = models.CharField(max_length=100)
+    keyword_list = models.CharField(max_length=100, default='')
     private = models.BooleanField(default=False)
     group = models.ForeignKey(Group)
     author = models.ForeignKey(CustomUser)

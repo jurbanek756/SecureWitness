@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'SecureWitness'
 )
 
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -55,6 +56,10 @@ ROOT_URLCONF = 'SecureWitness.urls'
 
 WSGI_APPLICATION = 'SecureWitness.wsgi.application'
 
+
+AUTH_USER_MODEL = 'SecureWitness.CustomUser'
+
+AUTHENTICATION_BACKENDS = ( 'SecureWitness.backend.CustomBackend', )
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases

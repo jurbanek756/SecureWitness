@@ -5,10 +5,15 @@
     <title>Welcome!</title>
 </head>
 <body>
-<p><input type="submit" value="Admin" /></p>
+{% csrf_token %}
+<p>Welcome {{ username }}!</p>
+<p><li><a href="/AdminInterface/">Admin Interface</a></li></p>
+<p><li><a href="/Logout/">Logout</a></li></p>
+<p>Reports:</p>
 {% for report in latest_report_list %}
-    Report:
-        <pre>{{ report }}</pre>
-    {% endfor %}
+   <pre>
+       <ins>Title:</ins> {{ report.report_title }} <ins>Publication:</ins> {{ report.pub_date }} <ins>Description:</ins> {{ report.report_text_short }}
+   </pre>
+{% endfor %}
 </body>
 </html>

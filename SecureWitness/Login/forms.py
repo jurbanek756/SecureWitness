@@ -1,10 +1,23 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Report, ReportManager
+from SecureWitness.models import Report, ReportManager
 
-class adminForm:
+class GroupForm(forms.Form):
+    group = forms.CharField(label='Group Name', required = 'True')
+'''
+class WelcomeForm(forms.Form):
+    admin_button = forms.()
+'''
+
+class AddToGroupForm(forms.Form):
+    user = forms.CharField(label='Username', required=True)
     group = forms.CharField(label='Group Name', required = 'True')
 
+class BanUsersForm(forms.Form):
+    user = forms.CharField(label='Username', required=True)
+
+class MakeAdminsForm(forms.Form):
+    user = forms.CharField(label='Username', required=True)
 
 class LoginForm(forms.Form):
 	user = forms.CharField(label='Username', required=True)

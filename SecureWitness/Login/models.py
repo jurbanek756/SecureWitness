@@ -1,6 +1,6 @@
 from django.db import models
 
-
+'''
 
 # Create your models here.
 
@@ -25,13 +25,4 @@ class Report(models.Model):
     # author = models.ForeignKey(Custom_User)
     objects = ReportManager()
 
-# class Custom_Group(models.Model, Group):
-#     group_name = models.CharField(max_length=50)
-#     mem_list = models.ForeignKey(Custom_User)
-#     def __str__(self):
-#         return self.group_name
-#
-# class Custom_User(models.Model, User):
-#     is_admin = models.BooleanField()
-#     is_reporter = models.BooleanField()
-#     group_list = models.ForeignKey(Custom_Group)
+'''
