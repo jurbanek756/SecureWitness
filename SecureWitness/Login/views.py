@@ -8,8 +8,9 @@ from .models import ReportManager, Report
 from .forms import ReportForm
 from SecureWitness.models import CustomUser, Report
 from django.contrib.auth.models import User, Group
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
 def welcome(request):
@@ -55,6 +56,8 @@ def register(request):
 				g = Group.objects.get(name='Users')
 				g.user_set.add(user)
 			'''
+            user.first_name = form['first'].value()
+            user.last_name = form['last'].value()
             user.save()
             if form.is_valid():
                 return HttpResponseRedirect('/Welcome/')
@@ -63,12 +66,15 @@ def register(request):
     return render(request, 'Register/index.html', {'form':form})
 # Create your views here.
 
+@login_required(redirect_field_name='Login', login_url='/Login/')
 def report(request):
     if request.method == 'POST':
-        form = ReportForm(request.POST)
-        if form.is_valid():
-            form = Report.objects.create_report(form['report_title'].value(), form['author'].value(),
-                                                form['pub_date'].value(), form['report_text_short'].value())
+        form = ReportForm(request.POST, request.FILES)
+        if form.is_valid() and request.user.is_authenticated():
+            user=request.user.first_name + " " + request.user.last_name
+            form = Report.objects.create_report(form['report_title'].value(), user, form['pub_date'].value(), form['incident_date'].value(), form['report_text_short'].value(), form['file_upload'].value(), form['report_text_long'].value(), form['location'].value(), form['private'].value())
+            form.save()
+            return HttpResponseRedirect('/Welcome/')
     else:
         form = ReportForm()
     return render(request, 'Report/report.html', {'form':form})

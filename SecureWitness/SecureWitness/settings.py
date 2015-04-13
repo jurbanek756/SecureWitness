@@ -26,6 +26,10 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ENV_PATH = os.path.abspath(os.path.dirname(__file__))
+MEDIA_ROOT = os.path.join(ENV_PATH, 'media/') 
+MEDIA_URL = 'media/'
+
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
 # Application definition
@@ -41,6 +45,7 @@ INSTALLED_APPS = (
     'SecureWitness'
 )
 
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,6 +57,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'SecureWitness.urls'
+
 
 WSGI_APPLICATION = 'SecureWitness.wsgi.application'
 

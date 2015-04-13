@@ -1,1 +1,9 @@
 <p>It's working I think #makingreports</p>
+
+<body>
+   <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" name="this" label="Submit" />
+   </form>
+</body>

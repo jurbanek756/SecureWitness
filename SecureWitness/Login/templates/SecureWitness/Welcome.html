@@ -5,10 +5,21 @@
     <title>Welcome!</title>
 </head>
 <body>
-<p><input type="submit" value="Admin" /></p>
-{% for report in latest_report_list %}
-    Report:
-        <pre>{{ report }}</pre>
-    {% endfor %}
+   <form method="post">
+      {% csrf_token %}
+      <p><input type="submit" value="Admin" /></p>
+      {% if not latest_report_list %}
+         <h>No Reports To Show</h>
+         {% endif %}
+      {% if user.is_authenticated %}
+         <p><input type="submit" name="report" value="Create Report" /input>
+         <input type="submit" name="logout" value="Logout" /input>
+         </p>
+         {% endif %}
+      {% for report in latest_report_list %}
+         Report:
+            <pre>{{ report }}</pre>
+         {% endfor %}
+   </form>
 </body>
 </html>
