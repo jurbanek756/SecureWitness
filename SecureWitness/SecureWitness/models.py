@@ -1,25 +1,27 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, Group, BaseUserManager
-
+from django.contrib.auth.models import AbstractBaseUser, Group, BaseUserManager, User
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, givenEmail, reporter, givenPass='wahoowah' ):
         email = self.normalize_email(givenEmail)
-        user = self.model(name=username, email=email, groups=Group.objects.get(name='Users'), password= givenPass, admin=False,reporter=reporter)
+        user = self.model(name=username, email=email, reporter=reporter, groups=Group.objects.get(name='Users'), password= givenPass, admin=False)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, givenEmail, reporter, givenPass='wahoowah' ):
-        email = self.normalize_email(givenEmail)
-        user = self.model(name=username, email=email, password= givenPass, admin=True,reporter=reporter)
+    def create_superuser(self, username, given_email, reporter, given_pass='wahoowah'  ):
+        email = self.normalize_email(given_email)
+        user = self.model(name=username, email=email, reporter=reporter, groups=Group.objects.get(name='Users'), password= given_pass, is_staff= True,  admin=True)
         user.save(using=self._db)
         return user
+
+
 
 
 class CustomUser(AbstractBaseUser):
     admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
     reporter = models.BooleanField(default=False)
     name = models.CharField(max_length=20)
-    groups= models.ForeignKey(Group)
+    groups= models.ManyToManyField(Group, null=True)
     objects= CustomUserManager()
     email = models.CharField(max_length=50, default= 'none')
     USERNAME_FIELD = 'name'
@@ -27,28 +29,29 @@ class CustomUser(AbstractBaseUser):
         return self.name
 
 class ReportManager(models.Manager):
-    def create_report(self, report_title, author, pub_date, report_text_short):
-        report = self.create(report_title = report_title, author = author, pub_date = pub_date, report_text_short = report_text_short)
+    def create_report(self, report_title, author, pub_date, incident_date, report_text_short, file_upload, report_text_long, location, private):
+        report = self.create(report_title = report_title, author = author, pub_date = pub_date, incident_date = incident_date, report_text_short = report_text_short, file_upload=file_upload, report_text_long=report_text_long, location=location, private=private)
         return report
 
 
 
 class Report(models.Model):
     # file support to be added
+    user = models.OneToOneField(User, null=True)
     report_title = models.CharField(max_length=50)
     report_text_short = models.CharField(max_length=150)
-    pub_date = models.DateTimeField('date published')
-    report_text_long = models.TextField()
+    pub_date = models.DateField('Date Pulished (YYYY-DD-MM)')
+    report_text_long = models.CharField(max_length=200)
     location = models.CharField(max_length=100)
-    incident_date = models.DateTimeField()
-
+    incident_date = models.DateField('Incident Date (YYYY-DD-MM)')
+    file_upload = models.FileField(null=True)
     objects = ReportManager()
-    keyword_list = models.CharField(max_length=100)
+    keyword_list = models.CharField(max_length=100, null=True)
     private = models.BooleanField(default=False)
-    group = models.ForeignKey(Group)
-    author = models.ForeignKey(CustomUser)
+#    group = models.ManyToManyField(Group, null=True)
+    author = models.CharField(max_length=50)
     def __str__(self):
-        string="{"+ self.report_title + " by "+self.author.name+ "\n"+ self.report_text_short + "\n"+ self.pub_date.__str__()+ "\n" + self.report_text_long + "\n" + self.location + "\n" + self.incident_date.__str__() + "\n" + self.keyword_list + "\n" + "Private: " + self.private.__str__() + "\n"+ self.group.__str__()+ "}"
+        string="{"+ self.report_title + " by "+self.author+ "\nShort Description: "+ self.report_text_short + "\nPublication Date: "+ str(self.pub_date)+ "\nAbstract: " + self.report_text_long + "\nLocation: " + self.location + "\nIncident Date: " + str(self.incident_date) + "\nKeywords: " + str(self.keyword_list) + "\n" + "Private: " + str(self.private) + "}"
         return string
 
 

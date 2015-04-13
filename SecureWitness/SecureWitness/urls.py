@@ -1,17 +1,36 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+
+
+from Login import views
+
 from SecureWitness import views
+from django.conf import settings
 
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'SecureWitness.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
     url(r'Welcome/$', views.welcome, name='welcome'),
+    url(r'AdminInterface/$', views.admin_interface, name='admin_interface'),
+    url(r'Add_to_Group/$', views.addView, name='addView'),
+    url(r'Create_Groups/$', views.create_group, name='create_group'),
+    url(r'User_Directory/$', views.directory, name='directory'),
+    url(r'Ban_users/$', views.ban_users, name='ban_users'),
+    url(r'Make_admins/$', views.make_admins, name='make_admins'),
     url(r'^$', include('Login.urls'), name='Login'),
+    url(r'Logout/$', views.logout_view, name='logout_view'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^Login/', include('Login.urls')),
     url(r'^Register/', 'Login.views.register', name='register'),
-    url(r'^Report/', 'Login.views.report', name='report'),
+    url(r'^report/', 'Login.views.report', name='report'),
+)
 
+
+if settings.DEBUG:
+    urlpatterns+= patterns('',
+        url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+            'document_root': settings.MEDIA_ROOT,
+        }),
 
 )
