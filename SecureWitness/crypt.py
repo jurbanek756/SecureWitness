@@ -69,4 +69,4 @@ if __name__ == '__main__':
         print("Decoding Complete.")
     else:
         print("No Option selected, closing...")
-        print("Test")
+
