@@ -1,6 +1,7 @@
 from django.contrib import admin
 from SecureWitness.models import CustomUser, Report #Custom_Group
-
+from django.forms import Textarea
+from django.db import models
 
 class ReportAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -10,10 +11,11 @@ class ReportAdmin(admin.ModelAdmin):
         (None,               {'fields': ['report_text_long']}),
         (None,               {'fields': ['location']}),
         (None,               {'fields': ['incident_date']}),
-        (None,               {'fields': ['keywords']}),
+        (None,               {'fields': ['keyword_list']}),
         (None,               {'fields': ['private']}),
         (None,               {'fields': ['group']}),
         (None,               {'fields': ['author']}),
+        (None,               {'fields': ['file_upload']})
     ]
 """
 class Custom_GroupAdmin(admin.ModelAdmin):
