@@ -17,7 +17,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractBaseUser):
-    user = models.OneToOneField(User, null=True)
+    user = models.OneToOneField(User)
     admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     reporter = models.BooleanField(default=False)

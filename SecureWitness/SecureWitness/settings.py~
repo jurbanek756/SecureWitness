@@ -62,6 +62,7 @@ ROOT_URLCONF = 'SecureWitness.urls'
 WSGI_APPLICATION = 'SecureWitness.wsgi.application'
 
 
+AUTH_USER_MODEL = 'SecureWitness.CustomUser'
 
 AUTHENTICATION_BACKENDS = ( 'SecureWitness.backend.CustomBackend', )
 
