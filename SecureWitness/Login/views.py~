@@ -102,10 +102,10 @@ def index(request):
                 user = authenticate(username = username, password = password)
                 if user is not None and user.is_active:
                     login(request, user)
-                    print("Works")
+					print("Works")
                     return HttpResponseRedirect('/Welcome/')
                 else:
-                    print("The Fuck")
+					print("The Fuck")
                     messages.error(request, 'Incorrect Authorization')
             else:
                 print("Invalid login")

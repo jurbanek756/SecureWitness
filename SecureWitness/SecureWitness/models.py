@@ -38,7 +38,6 @@ class ReportManager(models.Manager):
 
 class Report(models.Model):
     # file support to be added
-    user = models.OneToOneField(User, null=True)
     report_title = models.CharField(max_length=50)
     report_text_short = models.CharField(max_length=150)
     pub_date = models.DateField('Date Pulished (YYYY-DD-MM)')

@@ -63,7 +63,6 @@ WSGI_APPLICATION = 'SecureWitness.wsgi.application'
 
 
 
-AUTHENTICATION_BACKENDS = ( 'SecureWitness.backend.CustomBackend', )
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
