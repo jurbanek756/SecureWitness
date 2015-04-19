@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, Group, BaseUserManager, User
+from django.contrib.admin.widgets import AdminDateWidget
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, givenEmail, reporter, givenPass='wahoowah' ):
         email = self.normalize_email(givenEmail)
