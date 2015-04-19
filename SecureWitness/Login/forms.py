@@ -1,5 +1,6 @@
 from django import forms
 from django.forms import ModelForm
+from django.contrib.auth.models import User, Group
 from SecureWitness.models import Report, ReportManager
 from django.forms import ModelForm, Textarea
 
@@ -12,15 +13,19 @@ class WelcomeForm(forms.Form):
     admin_button = forms.()
 '''
 
+class UserAddToGroupForm(forms.Form):
+    user = forms.ModelChoiceField(queryset=User.objects.all(), label='Username', required=True)
+    #group = forms.ModelChoiceField(queryset=Group.objects.filter(), label='Group Name', required = 'True')
+
 class AddToGroupForm(forms.Form):
-    user = forms.CharField(label='Username', required=True)
-    group = forms.CharField(label='Group Name', required = 'True')
+    user = forms.ModelChoiceField(queryset=User.objects.all(), label='Username', required=True)
+    group = forms.ModelChoiceField(queryset=Group.objects.all(), label='Group Name', required = 'True')
 
 class BanUsersForm(forms.Form):
-    user = forms.CharField(label='Username', required=True)
+    user = forms.ModelChoiceField(queryset=User.objects.all(), label='Username', required=True)
 
 class MakeAdminsForm(forms.Form):
-    user = forms.CharField(label='Username', required=True)
+    user = forms.ModelChoiceField(queryset=User.objects.all(), label='Username', required=True)
 
 class LoginForm(forms.Form):
 	user = forms.CharField(label='Username', required=True)

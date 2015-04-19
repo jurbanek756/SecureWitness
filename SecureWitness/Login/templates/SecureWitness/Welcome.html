@@ -6,8 +6,12 @@
 </head>
 <body>
 {% csrf_token %}
-<p>Welcome {{ username }}!</p>
+<p>Welcome {{ user.username }}!</p>
+{% if user.is_staff == True %}
+
+
 <p><li><a href="/AdminInterface/">Admin Interface</a></li></p>
+{% endif %}
 <p>Reports:</p>
 
    <form method="post">
@@ -16,9 +20,11 @@
          <h>No Reports To Show</h>
          {% endif %}
       {% if user.is_authenticated %}
+          <p><a href="Add_User_To_Group/">Add another user to one of your groups</a></li> </p>
          <p><input type="submit" name="report" value="Create Report" /input>
          <input type="submit" name="logout" value="Logout" /input>
          </p>
+
          {% endif %}
       {% for report in latest_report_list %}
          Report:
