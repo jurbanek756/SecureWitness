@@ -47,10 +47,8 @@ def addView(request):
         form=AddToGroupForm(request.POST)
         if form.is_valid():
             if 'Add to Group' in request.POST:
-                username = request.POST['user']
-                name = request.POST['group']
-                user = User.objects.get(username=username)
-                group = Group.objects.get(name=name)
+                user = User.objects.get(pk=request.POST['user'])
+                group = Group.objects.get(pk=request.POST['group'])
                 group.user_set.add(user)
                 group.save()
                 return HttpResponseRedirect('/AdminInterface/')
@@ -67,9 +65,8 @@ def userAddView(request):
         form=UserAddToGroupForm(request.POST)
         if form.is_valid():
             if 'Add to Group' in request.POST:
-                username = request.POST['user']
                 name = request.POST['group']
-                user = User.objects.get(username=username)
+                user = User.objects.get(pk=request.POST['user'])
                 group = Group.objects.get(name=name)
                 group.user_set.add(user)
                 group.save()
@@ -100,8 +97,9 @@ def ban_users(request):
         form=BanUsersForm(request.POST)
         if form.is_valid():
             if 'Ban' in request.POST:
-                username = request.POST['user']
-                user = User.objects.get(username=username)
+                #username = request.POST['user']
+                #user = User.objects.get(username=username)
+                user = User.objects.get(pk=request.POST['user'])
                 user.is_active=False
                 user.save()
                 return HttpResponseRedirect('/AdminInterface/')
@@ -115,8 +113,7 @@ def make_admins(request):
         form=MakeAdminsForm(request.POST)
         if form.is_valid():
             if 'Make Admin' in request.POST:
-                username = request.POST['user']
-                user = User.objects.get(username=username)
+                user = User.objects.get(pk=request.POST['user'])
                 user.is_superuser = True
                 user.is_staff = True
                 user.save()
