@@ -42,10 +42,10 @@ class Report(models.Model):
     # file support to be added
     report_title = models.CharField(max_length=50)
     report_text_short = models.CharField(max_length=150)
-    pub_date = models.DateField('Date Pulished (YYYY-DD-MM)')
+    pub_date = models.DateField('Date Pulished (YYYY-MM-DD)')
     report_text_long = models.CharField(max_length=200)
     location = models.CharField(max_length=100)
-    incident_date = models.DateField('Incident Date (YYYY-DD-MM)')
+    incident_date = models.DateField('Incident Date (YYYY-MM-DD)')
     file_upload = models.FileField(null=True)
     objects = ReportManager()
     keyword_list = models.CharField(max_length=100, null=True)
