@@ -1,1 +1,1 @@
-web: sh -c "cd djangoproject && gunicorn SecureWitness.wsgi"
+web: sh -c "cd SecureWitness && gunicorn SecureWitness.wsgi"
