@@ -49,7 +49,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Login',
-    'SecureWitness'
+    'SecureWitness',
+    'gunicorn'
 )
 
 
@@ -75,12 +76,7 @@ WSGI_APPLICATION = 'SecureWitness.wsgi.application'
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
 # heroku changes, we now have switched to postgresql I believe
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-   }
+
 
 
 # Internationalization
@@ -115,7 +111,8 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 import dj_database_url
-DATABASES['default'] = dj_database_url.config()
+DATABASES = { 'default' : dj_database_url.config()}
+
 
 
 STATIC_ROOT = 'staticfiles'

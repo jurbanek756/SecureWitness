@@ -16,6 +16,8 @@ def welcome(request):
          logout(request)
          return HttpResponseRedirect('/Login/')
     latest_report_list = Report.objects.order_by('-pub_date')[:5]
+    #for each_report in latest_report_list:
+    #   str(request.user.username) != each_report.
     context = {'latest_report_list': latest_report_list}
     return render(request, 'SecureWitness/Welcome.html', context)
 
