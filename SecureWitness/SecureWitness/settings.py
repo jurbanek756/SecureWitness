@@ -31,7 +31,7 @@ SECRET_KEY = '5uv!jzjc_3#h077wtz(a8j(+(4-@jw!!((auxlf)(=$7b_o9ga'
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['https://team16securewitness.herokuapp.com']
+ALLOWED_HOSTS = [".herokuapp.com", ".researchthroughdesign.org"]
 
 ENV_PATH = os.path.abspath(os.path.dirname(__file__))
 MEDIA_ROOT = os.path.join(ENV_PATH, 'media/') 
