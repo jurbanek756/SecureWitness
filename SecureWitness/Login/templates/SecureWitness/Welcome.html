@@ -53,7 +53,6 @@
 
 <br>
 {% csrf_token %}
-<<<<<<< HEAD
 <p>Welcome {{ user.username }}!</p>
 {% if user.is_staff == True %}
 
@@ -69,14 +68,17 @@
          {% endif %}
       {% if user.is_authenticated %}
           <p><a href="Add_User_To_Group/">Add another user to one of your groups</a></li> </p>
-         <p><input type="submit" name="report" value="Create Report" /input>
-         <input type="submit" name="logout" value="Logout" /input>
+          <p><a href="Delete_Your_Report/">Delete one of your Reports</a></li> </p>
+          <p><a href="Search/">Search through available reports</a></li> </p>
+          <p><a href="YourReports/">Look at the reports you've uploaded personally</a></li> </p>
+         <p><input type="submit" name="report" value="Create Report" </input>
+         <input type="submit" name="logout" value="Logout" </input>
          </p>
 
          {% endif %}
       {% for report in latest_report_list %}
          Report:
-            <pre>{{ report }}</pre>
+           <a href="/{{ report.id }}/edit/" > <pre>{{ report }}</pre></a></li>
          {% endfor %}
    </form>
 =======

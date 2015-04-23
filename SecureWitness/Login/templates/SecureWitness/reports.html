@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Your Reports</title>
+</head>
+<body>
+Click on a report to edit it
+{% for report in reports %}
+ <p>Report {{ forloop.counter }}: <a href="/{{ report.id }}/edit/" >{{ report.report_title }}</a></li> </p>
+
+{% endfor %}
+</body>
+</html>
