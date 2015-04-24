@@ -122,7 +122,7 @@ DATABASES = { 'default' : dj_database_url.config()}
 
 STATIC_ROOT = 'staticfiles'
 
-DEBUG = False
+DEBUG = True
 
 try:
     from .local_settings import *
