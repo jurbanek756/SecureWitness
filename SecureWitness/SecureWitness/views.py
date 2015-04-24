@@ -19,7 +19,7 @@ def welcome(request):
     latest_report_list = Report.objects.filter(private=False)
     for gr in user.groups.all():
       newList= Report.objects.filter(group__name= gr.name)
-    latest_report_list = latest_report_list | newList
+      latest_report_list = latest_report_list | newList
     if request.method == 'POST':
       if 'report' in request.POST:
          return HttpResponseRedirect('/report/')
