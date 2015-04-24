@@ -19,5 +19,11 @@ def welcome(request):
     context = {'latest_report_list': latest_report_list}
     return render(request, 'SecureWitness/Welcome.html', context)
 
+def remoteLogin(request):
+    if request.user.is_authenticated():
+        return True
+    else:
+        return False
+
 
 

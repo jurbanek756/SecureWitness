@@ -1,13 +1,13 @@
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from django.template import loader
-from django.core.context_processors import csrf
-from .forms import LoginForm, RegisterForm, ReportForm, GroupForm, MakeAdminsForm, BanUsersForm, AddToGroupForm
-from SecureWitness.models import CustomUser, Report
 from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+
+from .forms import LoginForm, RegisterForm, ReportForm, GroupForm, MakeAdminsForm, BanUsersForm, AddToGroupForm
+from SecureWitness.models import CustomUser, Report
+from SecureWitness.media import crypt
 
 
 @login_required(login_url='//')
@@ -144,8 +144,14 @@ def report(request):
         form = ReportForm(request.POST, request.FILES)
         if form.is_valid() and request.user.is_authenticated():
             user=request.user.first_name + " " + request.user.last_name
-            form = Report.objects.create_report(form['report_title'].value(), user, form['pub_date'].value(), form['incident_date'].value(), form['report_text_short'].value(), form['file_upload'].value(), form['report_text_long'].value(), form['location'].value(), form['private'].value())
+            form = Report.objects.create_report(form['report_title'].value(), user, form['pub_date'].value(), form['incident_date'].value(), form['report_text_short'].value(), form['file_upload'].value(), form['report_text_long'].value(), form['location'].value(), form['private'].value(), form['key'].value())
             form.save()
+            #print(form.file_upload.name)
+            #with open(form.file_upload, 'rb') as infile:
+            #    infile.read(32)
+            if form.private is True and form.key is not None:
+                crypt.encrypt_file(crypt.getKey(form.key), form.file_upload)
+
             return HttpResponseRedirect('/Welcome/')
     else:
         form = ReportForm()

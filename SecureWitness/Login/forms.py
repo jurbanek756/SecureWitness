@@ -39,7 +39,7 @@ class ReportForm(ModelForm):
         model = Report
         fields = ['report_title', 'pub_date', 'report_text_short',
               'report_text_long', 'location', 'incident_date',
-              'private', 'file_upload']
+              'private', 'key', 'file_upload']
         widgets = {
             'report_text_long':Textarea(attrs={'cols': 80, 'rows': 20}),
         }
