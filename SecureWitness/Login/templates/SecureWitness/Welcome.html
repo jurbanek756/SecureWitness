@@ -52,6 +52,11 @@
                         <li><a href="../groups/">Invite others..</a></li>
                     </ul>
                 </li>
+                <form method="post">
+                  {% csrf_token %}
+                  {{ form }}
+                  <button type="submit" class="btn btn-primary" name="Search" value="Search">Search</button> 
+                </form>
             </ul>
         </div>
         <!--/.nav-collapse -->
@@ -139,7 +144,9 @@
 
 
                     <p>
+                      {% if perms.SecureWitness.add_report %}
                         <button type="submit" class="btn btn-primary" name="report">Create Report</button>
+                      {% endif %}
                         <button type="submit" class="btn btn-primary" name="logout">Logout</button>
                     </p>
                 {% endif %}

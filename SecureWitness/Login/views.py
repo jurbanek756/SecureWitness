@@ -5,31 +5,22 @@ from django.template import loader, RequestContext
 from django.core.context_processors import csrf
 from .forms import LoginForm, RegisterForm, ReportForm, GroupForm, MakeAdminsForm, BanUsersForm, AddToGroupForm, UserAddToGroupForm, DeleteReportForm, SearchForm
 from SecureWitness.models import Report
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group, Permission
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 import datetime
-
-
-@login_required(redirect_field_name='Login', login_url='/Login/')
-def search(request):
-    user = request.user
-    results = Report.objects.filter(author=user.username)
-    if request.method == 'POST':
-        form = SearchForm(request.POST)
-        if 'Search' in request.POST:
-            results.filter(keyword_list.contains(request.POST['q']))
-            return render(request, 'SecureWitness/search_results.html', {"results": results, "user":user})
-
-    else:
-        form=SearchForm()
-
-    return render(request, 'SecureWitness/search.html', {"results": results, "user":user, "form": form})
+from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+import SecureWitness
 
 
 def is_active_check(user):
     return user.is_active
+
+def is_reporter(user):
+  gr = Group.objects.get(name='Reporter')
+  return gr in user.groups
 
 @login_required(redirect_field_name='Login', login_url='/Login/')
 @user_passes_test(is_active_check, redirect_field_name='Login', login_url='/Login/')
@@ -41,7 +32,8 @@ def welcome(request):
             return HttpResponseRedirect('/AdminInterface/')
     '''
     user = request.user
-    latest_report_list = Report.objects.order_by('-pub_date')
+    for gr in user__groups.all():
+      latest_report_list = Report.objects.filter(group__name= gr.name)
     context1 = {'latest_report_list': latest_report_list,"user": user}
     return render(request, 'SecureWitness/Welcome.html', context1)
 
@@ -205,10 +197,8 @@ def index(request):
                 user = authenticate(username = username, password = password)
                 if user is not None and user.is_active:
                     login(request, user)
-                    print("Works")
                     return HttpResponseRedirect('/Welcome/')
                 else:
-                    print("The Fuck")
                     messages.error(request, 'Incorrect Authorization')
             else:
                 print("Invalid login")
@@ -233,6 +223,9 @@ def register(request):
 			'''
             user.first_name = form['first'].value()
             user.last_name = form['last'].value()
+            if form['reporter'].value():
+              permission = Permission.objects.get(codename='add_report')
+              user.user_permissions.add(permission)
             user.save()
             if form.is_valid():
                 return HttpResponseRedirect('/Login/')
@@ -242,12 +235,15 @@ def register(request):
 # Create your views here.
 
 @login_required(redirect_field_name='Login', login_url='/Login/')
+@permission_required('SecureWitness.add_report')
 def report(request):
     if request.method == 'POST':
         form = ReportForm(request.POST, request.FILES)
         if form.is_valid() and request.user.is_authenticated():
             user=request.user.username
-            form = Report.objects.create_report(form['report_title'].value(), user, datetime.datetime.now(), form['incident_date'].value(), form['report_text_short'].value(), form['file_upload'].value(), form['report_text_long'].value(), form['location'].value(), form['private'].value(), form['keyword_list'].value())
+            group= Group.objects.get(pk=form['group'].value())
+
+            form = Report.objects.create_report(form['report_title'].value(), user, form['pub_date'].value(), form['incident_date'].value(), form['report_text_short'].value(), form['file_upload'].value(), form['report_text_long'].value(), form['location'].value(), form['private'].value(), group, form['keyword_list'].value())
             form.save()
             return HttpResponseRedirect('/Welcome/')
     else:

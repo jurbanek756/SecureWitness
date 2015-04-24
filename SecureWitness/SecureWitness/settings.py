@@ -12,6 +12,13 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 import dj_database_url
 
+'''
+Things to Change Back:
+Heroku Deployment Chango
+Comment out DEBUG=True
+Change back DATABASES
+UnComment out DEBUD=False
+'''
 # heroku deployment change
 #BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -36,7 +43,7 @@ ALLOWED_HOSTS = ['*']
 ENV_PATH = os.path.abspath(os.path.dirname(__file__))
 MEDIA_ROOT = os.path.join(ENV_PATH, 'media/') 
 MEDIA_URL = 'media/'
-
+LOGIN_URL = '/Login/'
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
 # Application definition
@@ -113,11 +120,9 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 import dj_database_url
 DATABASES = { 'default' : dj_database_url.config()}
 
-
-
 STATIC_ROOT = 'staticfiles'
 
-DEBUG = False
+DEBUG = True
 
 try:
     from .local_settings import *
