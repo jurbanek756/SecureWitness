@@ -1,16 +1,29 @@
-from django.shortcuts import render
+from django.shortcuts import render_to_response, render
 from django.http import HttpResponseRedirect
-from django.contrib.auth.models import Group
+from django.template import loader, RequestContext
+from django.core.context_processors import csrf
+from .forms import LoginForm, RegisterForm, ReportForm, GroupForm, MakeAdminsForm, BanUsersForm, AddToGroupForm, UserAddToGroupForm, DeleteReportForm, SearchForm
+from SecureWitness.models import Report
+from django.contrib.auth.models import User, Group, Permission
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-
-from .forms import LoginForm, RegisterForm, ReportForm, GroupForm, MakeAdminsForm, BanUsersForm, AddToGroupForm
-from SecureWitness.models import CustomUser, Report
+from django.contrib.auth.decorators import login_required, user_passes_test
+import datetime
+from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+import SecureWitness
 from SecureWitness.media import crypt
 
 
-@login_required(login_url='//')
+def is_active_check(user):
+    return user.is_active
+
+def is_reporter(user):
+  gr = Group.objects.get(name='Reporter')
+  return gr in user.groups
+
+@login_required(redirect_field_name='Login', login_url='/Login/')
+@user_passes_test(is_active_check, redirect_field_name='Login', login_url='/Login/')
 def welcome(request):
     '''
     if request.method == 'POST':
@@ -18,38 +31,88 @@ def welcome(request):
         if( 'adminButton' in request.POST):
             return HttpResponseRedirect('/AdminInterface/')
     '''
-    username = request.user.name
-    latest_report_list = Report.objects.order_by('-pub_date')[:5]
-    context1 = {'latest_report_list': latest_report_list,"username": username}
+    user = request.user
+    for gr in user__groups.all():
+      latest_report_list = Report.objects.filter(group__name= gr.name)
+    context1 = {'latest_report_list': latest_report_list,"user": user}
     return render(request, 'SecureWitness/Welcome.html', context1)
 
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect('//')
 
+def yourReports(request):
+    user = request.user
+    reports = Report.objects.filter(author = user.username)
+    return render(request, 'SecureWitness/reports.html',{"reports":reports} )
+
+@login_required(redirect_field_name='Login', login_url='/Login/')
+def edit_view(request, report_id):
+    report = Report.objects.get(pk=report_id)
+    if request.method== 'POST':
+        form = ReportForm(request.POST, request.FILES, instance = report)
+        if form.is_valid():
+            if 'Submit' in request.POST:
+                report.report_title = form['report_title'].value()
+                report.incident_date = form['incident_date'].value()
+                report.report_text_short = form['report_text_short'].value()
+                report.file_upload = form['file_upload'].value()
+                report.report_text_long = form['report_text_long'].value()
+                report.location = form['location'].value()
+                report.private = form['private'].value()
+                report.keyword_list = form['keyword_list'].value()
+                report.save()
+                return HttpResponseRedirect('/Welcome/')
+
+    else:
+        form = ReportForm(instance = report )
+    return render(request, 'SecureWitness/edit.html', {"report":report, "form": form})
+
+@login_required(redirect_field_name='Login', login_url='/Login/')
 def directory(request):
-    user_list = CustomUser.objects.all()
+    user_list = User.objects.all()
     return render(request,'SecureWitness/directory.html', {"user_list":user_list} )
 
+@login_required(redirect_field_name='Login', login_url='/Login/')
 def admin_interface(request):
     return render(request,'SecureWitness/admin_interface.html' )
 
+@login_required(redirect_field_name='Login', login_url='/Login/')
 def addView(request):
     if request.method == 'POST':
         form=AddToGroupForm(request.POST)
         if form.is_valid():
             if 'Add to Group' in request.POST:
-                username = request.POST['user']
-                name = request.POST['group']
-                user = CustomUser.objects.get(name=username)
-                group = Group.objects.get(name=name)
-                group.customuser_set.add(user)
+                user = User.objects.get(pk=request.POST['user'])
+                group = Group.objects.get(pk=request.POST['group'])
+                group.user_set.add(user)
                 group.save()
                 return HttpResponseRedirect('/AdminInterface/')
     else:
         form = AddToGroupForm()
     return render(request, 'SecureWitness/addGroup.html',{"form": form})
 
+
+@login_required(redirect_field_name='Login', login_url='/Login/')
+def userAddView(request):
+    user = request.user
+    groups = user.groups.all()
+    if request.method == 'POST':
+        form=UserAddToGroupForm(request.POST)
+        if form.is_valid():
+            if 'Add to Group' in request.POST:
+                user = User.objects.get(pk=request.POST['user'])
+                group = Group.objects.get(pk=request.POST['group'])
+                group.user_set.add(user)
+                group.save()
+                return HttpResponseRedirect('/Welcome/')
+    else:
+        form = UserAddToGroupForm()
+    return render(request, 'SecureWitness/userAddGroup.html',{"form": form, "groups":groups, "user": user})
+
+
+
+@login_required(redirect_field_name='Login', login_url='/Login/')
 def create_group(request):
     if request.method == 'POST':
         form=GroupForm(request.POST)
@@ -63,32 +126,64 @@ def create_group(request):
         form = GroupForm()
     return render(request, 'SecureWitness/create_group.html', {"form": form})
 
+@login_required(redirect_field_name='Login', login_url='/Login/')
 def ban_users(request):
     if request.method == 'POST':
         form=BanUsersForm(request.POST)
         if form.is_valid():
             if 'Ban' in request.POST:
-                username = request.POST['user']
-                user = CustomUser.objects.get(name=username)
-                user.delete()
+                #username = request.POST['user']
+                #user = User.objects.get(username=username)
+                user = User.objects.get(pk=request.POST['user'])
+                user.is_active=False
+                user.save()
                 return HttpResponseRedirect('/AdminInterface/')
     else:
         form =BanUsersForm()
     return render(request, 'SecureWitness/ban_users.html',{"form": form})
 
+@login_required(redirect_field_name='Login', login_url='/Login/')
 def make_admins(request):
     if request.method == 'POST':
         form=MakeAdminsForm(request.POST)
         if form.is_valid():
             if 'Make Admin' in request.POST:
-                username = request.POST['user']
-                user = CustomUser.objects.get(name=username)
-                user.admin = True
+                user = User.objects.get(pk=request.POST['user'])
+                user.is_superuser = True
+                user.is_staff = True
                 user.save()
                 return HttpResponseRedirect('/AdminInterface/')
     else:
         form = MakeAdminsForm()
     return render(request, 'SecureWitness/make_admins.html', {"form": form})
+
+
+@login_required(redirect_field_name='Login', login_url='/Login/')
+def delReportView(request):
+    if request.method == 'POST':
+        form=DeleteReportForm(request.POST)
+        if form.is_valid():
+            if 'Delete' in request.POST:
+                report = Report.objects.get(pk=request.POST['report'])
+                report.delete()
+                #report.save()
+                return HttpResponseRedirect('/AdminInterface/')
+    else:
+        form =DeleteReportForm()
+    return render(request, 'SecureWitness/delete_reports.html',{"form": form})
+
+
+@login_required(redirect_field_name='Login', login_url='/Login/')
+def delYourReportView(request):
+    user = request.user
+    reports = Report.objects.filter(author = user.username)
+    if 'Delete' in request.POST:
+        report = Report.objects.get(pk=request.POST['report'])
+        report.delete()
+        return HttpResponseRedirect('/Welcome/')
+
+    return render(request, 'SecureWitness/user_delete_reports.html', {"reports": reports, "user":user})
+
 
 def index(request):
     if request.method == 'POST':
@@ -102,10 +197,8 @@ def index(request):
                 user = authenticate(username = username, password = password)
                 if user is not None and user.is_active:
                     login(request, user)
-                    print("Works")
                     return HttpResponseRedirect('/Welcome/')
                 else:
-                    print("The Fuck")
                     messages.error(request, 'Incorrect Authorization')
             else:
                 print("Invalid login")
@@ -118,7 +211,7 @@ def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            user= CustomUser.objects.create_user(form['username'].value(), form['usremail'].value(), form['reporter'].value(), form['usrpass'].value())
+            user= User.objects.create_user(form['username'].value(), form['usremail'].value(), form['usrpass'].value())
             '''
 			user = User.objects.create_user(form['username'].value(), form['usremail'].value(), form['usrpass'].value())
 			if form['reporter'].value():
@@ -130,6 +223,9 @@ def register(request):
 			'''
             user.first_name = form['first'].value()
             user.last_name = form['last'].value()
+            if form['reporter'].value():
+              permission = Permission.objects.get(codename='add_report')
+              user.user_permissions.add(permission)
             user.save()
             if form.is_valid():
                 return HttpResponseRedirect('/Login/')
@@ -139,12 +235,16 @@ def register(request):
 # Create your views here.
 
 @login_required(redirect_field_name='Login', login_url='/Login/')
+@permission_required('SecureWitness.add_report')
 def report(request):
     if request.method == 'POST':
         form = ReportForm(request.POST, request.FILES)
         if form.is_valid() and request.user.is_authenticated():
-            user=request.user.first_name + " " + request.user.last_name
-            form = Report.objects.create_report(form['report_title'].value(), user, form['pub_date'].value(), form['incident_date'].value(), form['report_text_short'].value(), form['file_upload'].value(), form['report_text_long'].value(), form['location'].value(), form['private'].value(), form['key'].value())
+
+            user=request.user.username
+            group= Group.objects.get(pk=form['group'].value())
+
+            form = Report.objects.create_report(form['report_title'].value(), user, form['pub_date'].value(), form['incident_date'].value(), form['report_text_short'].value(), form['file_upload'].value(), form['report_text_long'].value(), form['location'].value(), form['private'].value(), group, form['key'].value(), form['keyword_list'].value())
             form.save()
             #print(form.file_upload.name)
             #with open(form.file_upload, 'rb') as infile:

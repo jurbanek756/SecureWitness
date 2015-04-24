@@ -17,8 +17,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='CustomUser',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('password', models.CharField(verbose_name='password', max_length=128)),
+                ('id', models.AutoField(auto_created=True, serialize=False, primary_key=True, verbose_name='ID')),
+                ('password', models.CharField(max_length=128, verbose_name='password')),
                 ('last_login', models.DateTimeField(default=django.utils.timezone.now, verbose_name='last login')),
                 ('admin', models.BooleanField(default=False)),
                 ('is_staff', models.BooleanField(default=False)),
@@ -26,6 +26,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(unique=True, max_length=20)),
                 ('email', models.CharField(default='none', max_length=50)),
                 ('groups', models.ManyToManyField(to='auth.Group', null=True)),
+                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
                 'abstract': False,
@@ -35,18 +36,18 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Report',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
+                ('id', models.AutoField(auto_created=True, serialize=False, primary_key=True, verbose_name='ID')),
                 ('report_title', models.CharField(max_length=50)),
                 ('report_text_short', models.CharField(max_length=150)),
-                ('pub_date', models.DateField(verbose_name='Date Pulished (YYYY-DD-MM)')),
-                ('report_text_long', models.CharField(max_length=200)),
+                ('pub_date', models.DateField(verbose_name='Date Pulished (YYYY-MM-DD)')),
+                ('report_text_long', models.CharField(unique=True, max_length=200)),
                 ('location', models.CharField(max_length=100)),
-                ('incident_date', models.DateField(verbose_name='Incident Date (YYYY-DD-MM)')),
-                ('file_upload', models.FileField(upload_to='', null=True)),
-                ('keyword_list', models.CharField(null=True, max_length=100)),
+                ('file_upload', models.FileField(upload_to='', blank=True, null=True)),
+                ('incident_date', models.DateField(verbose_name='Incident Date (YYYY-MM-DD)')),
+                ('keyword_list', models.CharField(null=True, max_length=50)),
                 ('private', models.BooleanField(default=False)),
                 ('author', models.CharField(max_length=50)),
-                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL, null=True)),
+                ('group', models.ForeignKey(to='auth.Group')),
             ],
             options={
             },
