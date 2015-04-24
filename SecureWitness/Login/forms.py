@@ -63,6 +63,5 @@ class ReportForm(ModelForm):
                   'keyword_list', 'private', 'file_upload']
 
         widgets = {
-            'report_text_long': Textarea(attrs={'cols': 80, 'rows': 10}),
-            'pub_date': AdminDateWidget()
+            'report_text_long': Textarea(attrs={'cols': 50, 'rows': 8})
         }

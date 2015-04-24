@@ -1,1 +1,1 @@
-web: gunicorn securewitness.wsgi --log-file -
+web: sh -c "cd SecureWitness && gunicorn SecureWitness.wsgi"
