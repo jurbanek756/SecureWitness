@@ -1,3 +1,4 @@
+
 from django.shortcuts import render_to_response, render
 from django.http import HttpResponseRedirect
 from django.template import loader, RequestContext
@@ -11,7 +12,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 import datetime
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
-import SecureWitness
 from SecureWitness.media import crypt
 
 

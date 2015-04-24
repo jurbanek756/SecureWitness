@@ -59,6 +59,7 @@ class ReportForm(ModelForm):
                   'report_text_long', 'location', 'incident_date',
                   'private', 'file_upload', 'group', 'key', 'keyword_list']
 
+
         widgets = {
             'report_text_long': Textarea(attrs={'cols': 50, 'rows': 8})
         }
