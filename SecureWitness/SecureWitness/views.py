@@ -30,12 +30,25 @@ def welcome(request):
         form = SearchForm(request.POST)
         if form.is_valid():
           keywords = request.POST['search'].split()
+          ans = []
+          ans.append([])
+          i = 0
+          j = 0
+          for word in keywords:
+
+            if word == "AND":
+              i+=1
+              ans.append([])
+            elif word == "OR":
+              pass
+            else:
+              ans[i].append(word)
+          print(ans)
           for rep in latest_report_list:
             rep_keywords = str(rep)
-            for word in keywords:
-              if word not in rep_keywords:
+            for k in range(len(ans)):
+              if not any(word in rep_keywords for word in ans[k]):
                 latest_report_list = latest_report_list.exclude(report_text_long= rep.report_text_long)
-                break
   
     else:
       form = SearchForm()
@@ -45,4 +58,11 @@ def welcome(request):
     return render(request, 'SecureWitness/Welcome.html', context)
 
 
-
+def profile(request):
+    if request.method == 'POST':
+        pass    
+    else:
+        user = request.user
+        reports = Report.objects.filter(author = user.username)
+    context = {'reports':reports, 'user':user}
+    return render(request, 'SecureWitness/profile.html', context)

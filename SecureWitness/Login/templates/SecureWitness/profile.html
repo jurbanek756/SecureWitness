@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>My Profile</title>
+</head>
+<body>
+    {% csrf_token %}
+    {% if not reports %}
+        <h>You  have No Reports</h>
+    {% else %}
+        <h>Your Reports:<br><h>
+    {% endif %}
+    
+    {% for report in reports %}
+        {{ report }}
+    {% endfor %}
+</body>
+</html>
