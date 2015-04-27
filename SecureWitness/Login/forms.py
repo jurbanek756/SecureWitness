@@ -36,8 +36,9 @@ class MakeAdminsForm(forms.Form):
 
 
 class LoginForm(forms.Form):
-    user = forms.CharField(label='Username', required=True)
-    usrpass = forms.CharField(label='Password', widget=forms.PasswordInput, required=True)
+    user = forms.CharField(label='', required=True,
+                           widget=forms.TextInput(attrs={'placeholder':'User Name'}))
+    usrpass = forms.CharField(label='', widget=forms.PasswordInput(attrs={'placeholder':'Password'}), required=True)
 
 
 class RegisterForm(forms.Form):
