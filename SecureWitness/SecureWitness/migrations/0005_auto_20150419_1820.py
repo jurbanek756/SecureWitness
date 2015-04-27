@@ -7,14 +7,14 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('SecureWitness', '0005_remove_report_keyword_list'),
+        ('SecureWitness', '0004_auto_20150419_1818'),
     ]
 
     operations = [
-        migrations.AddField(
+        migrations.AlterField(
             model_name='report',
-            name='keyword_list',
-            field=models.CharField(max_length=50, null=True),
+            name='key',
+            field=models.CharField(max_length=32, null=True, blank=True),
             preserve_default=True,
         ),
     ]

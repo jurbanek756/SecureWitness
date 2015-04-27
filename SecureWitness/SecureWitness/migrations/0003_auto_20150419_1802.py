@@ -7,14 +7,18 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('SecureWitness', '0003_auto_20150422_2253'),
+        ('SecureWitness', '0002_customuser_user'),
     ]
 
     operations = [
-        migrations.AlterField(
+        migrations.RemoveField(
             model_name='report',
-            name='group',
-            field=models.ForeignKey(to='auth.Group'),
+            name='user',
+        ),
+        migrations.AddField(
+            model_name='report',
+            name='key',
+            field=models.CharField(null=True, max_length=50, blank=True),
             preserve_default=True,
         ),
     ]

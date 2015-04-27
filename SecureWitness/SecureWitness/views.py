@@ -57,6 +57,12 @@ def welcome(request):
     context = {'latest_report_list': latest_report_list, 'form':form}
     return render(request, 'SecureWitness/Welcome.html', context)
 
+def remoteLogin(request):
+    if request.user.is_authenticated():
+        return True
+    else:
+        return False
+
 
 @login_required(redirect_field_name='Login', login_url='/Login/')
 @user_passes_test(is_active_check, redirect_field_name='Login', login_url='/Login/')

@@ -1,3 +1,4 @@
+
 """
 Django settings for SecureWitness project.
 
@@ -125,6 +126,6 @@ STATIC_ROOT = 'staticfiles'
 DEBUG = True
 
 try:
-    from .local_settings import *
+    from SecureWitness.local_settings import *
 except ImportError:
     pass
