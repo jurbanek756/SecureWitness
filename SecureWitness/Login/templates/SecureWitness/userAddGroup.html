@@ -9,11 +9,11 @@
 		{% csrf_token %}
 		{{ form.as_p }}
 Group:
-    <select>
         {% for group in groups %}
-            <option value="{{ group }}">{{ group }}</option>
+            <p><input type="radio" name="group" id="{{ forloop.counter }}" value="{{ group.id }}" />
+    <label for="group{{ forloop.counter }}">{{ group.name }}</label><br />
+            </p>
         {% endfor %}
-    </select>
 
 <p>       <input type="submit" name="Add to Group" value="Add to Group" /> </p>
     </form>

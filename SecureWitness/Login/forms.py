@@ -10,13 +10,13 @@ class GroupForm(forms.Form):
     group = forms.CharField(label='Group Name', required='True')
 
 
-'''
-class WelcomeForm(forms.Form):
-    admin_button = forms.()
-'''
-
 class SearchForm(forms.Form):
-  search = forms.CharField(label='Search', required=True)
+    search = forms.CharField(label='Search', required=True)
+
+
+class DeleteReportForm(forms.Form):
+    report = forms.ModelChoiceField(queryset=Report.objects.all(), label='Report', required=True)
+
 
 class UserAddToGroupForm(forms.Form):
     user = forms.ModelChoiceField(queryset=User.objects.all(), label='Username', required=True)
@@ -54,9 +54,11 @@ class ReportForm(ModelForm):
 
     class Meta:
         model = Report
+
         fields = ['report_title', 'report_text_short',
                   'report_text_long', 'location', 'incident_date',
-                  'private', 'file_upload', 'group', 'keyword_list']
+                  'private', 'file_upload', 'group', 'key', 'keyword_list']
+
 
         widgets = {
             'report_text_long': Textarea(attrs={'cols': 50, 'rows': 8})

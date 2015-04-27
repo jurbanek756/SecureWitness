@@ -30,12 +30,25 @@ def welcome(request):
         form = SearchForm(request.POST)
         if form.is_valid():
           keywords = request.POST['search'].split()
+          ans = []
+          ans.append([])
+          i = 0
+          j = 0
+          for word in keywords:
+
+            if word == "AND":
+              i+=1
+              ans.append([])
+            elif word == "OR":
+              pass
+            else:
+              ans[i].append(word)
+          print(ans)
           for rep in latest_report_list:
             rep_keywords = str(rep)
-            for word in keywords:
-              if word not in rep_keywords:
+            for k in range(len(ans)):
+              if not any(word in rep_keywords for word in ans[k]):
                 latest_report_list = latest_report_list.exclude(report_text_long= rep.report_text_long)
-                break
   
     else:
       form = SearchForm()
@@ -44,5 +57,20 @@ def welcome(request):
     context = {'latest_report_list': latest_report_list, 'form':form}
     return render(request, 'SecureWitness/Welcome.html', context)
 
+def remoteLogin(request):
+    if request.user.is_authenticated():
+        return True
+    else:
+        return False
 
 
+@login_required(redirect_field_name='Login', login_url='/Login/')
+@user_passes_test(is_active_check, redirect_field_name='Login', login_url='/Login/')
+def profile(request):
+    if request.method == 'POST':
+        pass    
+    else:
+        user = request.user
+        reports = Report.objects.filter(author = user.username)
+    context = {'reports':reports, 'user':user}
+    return render(request, 'SecureWitness/profile.html', context)

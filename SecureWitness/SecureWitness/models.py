@@ -32,8 +32,8 @@ class CustomUser(AbstractBaseUser):
         return self.name
 
 class ReportManager(models.Manager):
-    def create_report(self, report_title, author, pub_date, incident_date, report_text_short, file_upload, report_text_long, location, private, group, keyword_list):
-        report = self.create(report_title = report_title, author = author, pub_date = pub_date, incident_date = incident_date, report_text_short = report_text_short, file_upload=file_upload, report_text_long=report_text_long, location=location, private=private, group=group, keyword_list=keyword_list)
+    def create_report(self, report_title, author, pub_date, incident_date, report_text_short, file_upload, report_text_long, location, private, group, key, keyword_list):
+        report = self.create(report_title = report_title, author = author, pub_date = pub_date, incident_date = incident_date, report_text_short = report_text_short, file_upload=file_upload, report_text_long=report_text_long, location=location, private=private, group=group, key = key, keyword_list=keyword_list)
         return report
 
 
@@ -45,16 +45,27 @@ class Report(models.Model):
     pub_date = models.DateField('Date Pulished (YYYY-MM-DD)')
     report_text_long = models.CharField(max_length=200, unique=True)
     location = models.CharField(max_length=100)
+    file_upload = models.FileField(null=True, blank= True)
     incident_date = models.DateField('Incident Date (YYYY-MM-DD)')
-    file_upload = models.FileField(null=True, blank = True)
     objects = ReportManager()
     keyword_list = models.CharField(max_length=50, null=True)
     private = models.BooleanField(default=False)
+    key = models.CharField(max_length=32, null=True, blank=True)
     group = models.ForeignKey(Group)
     author = models.CharField(max_length=50)
     def __str__(self):
         string="{"+ self.report_title + " by "+self.author+ "\nShort Description: "+ self.report_text_short + "\nPublication Date: "+ str(self.pub_date)+ "\nAbstract: " + self.report_text_long + "\nLocation: " + self.location + "\nIncident Date: " + str(self.incident_date) + "\nKeywords: " + str(self.keyword_list) + "\n" + "Private: " + str(self.private) + "}"
         return string
 
+class FolderManager(models.Manager):
+    def create_report(self, name, groups, reports):
+        folder = self.create(name= name, groups = groups, reports = reports)
+        return folder
 
+
+class Folder(models.Model):
+    name = models.CharField(max_length=50)
+    groups = models.ForeignKey(Group, blank= True)
+    reports = models.ForeignKey(Report, blank= True)
+    objects = FolderManager()
 

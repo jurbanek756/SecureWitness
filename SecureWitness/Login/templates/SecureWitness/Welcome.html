@@ -42,6 +42,7 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Home</a></li>
                 <li><a href="#about">About</a></li>
+                <li><a href="../profile/">My Profile</a></li>
                 <li><a href="../report/">Report</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Groups
@@ -63,7 +64,7 @@
     </div>
 </nav>
 
-{% csrf_token %}
+
 
 
 <div class="container">
@@ -77,6 +78,10 @@
           <p><a href="Delete_Your_Report/">Delete one of your Reports</a></li> </p>
           <p><a href="Search/">Search through available reports</a></li> </p>
           <p><a href="YourReports/">Look at the reports you've uploaded personally</a></li> </p>
+            <p><a href="Create_Folder/">Make a Folder</a></li> </p>
+            <p><a href="Share_Folder/">Share a Folder</a></li> </p>
+            <p><a href="Add_to_Folder/">Add Reports to a Folder</a></li> </p>
+            <p><a href="Delete_Folder/">Delete a Folder</a></li> </p>
             <h1><p>Reports:</p></h1>
 
             <form method="post">
@@ -109,10 +114,6 @@
                                     </tbody>{% endfor %}
                                     </table>
                                     </div>
-
-
-
-
                     <p>
                       {% if perms.SecureWitness.add_report %}
                         <button type="submit" class="btn btn-primary" name="report">Create Report</button>

@@ -2,13 +2,14 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Add_to_Group</title>
+    <title>Admin Delete Reports</title>
 </head>
 <body>
 <form method="post">
-		{% csrf_token %}
+{% csrf_token %}
+
 		{{ form.as_p }}
-        <input type="submit" name="Add to Group" value="Add to Group" />
+        <input type="submit" name="Delete" value="Delete" />
     </form>
 </body>
 </html>
