@@ -54,7 +54,7 @@ class ReportForm(ModelForm):
 
     class Meta:
         model = Report
-        fields = ['report_title', 'pub_date', 'report_text_short',
+        fields = ['report_title', 'report_text_short',
                   'report_text_long', 'location', 'incident_date',
                   'private', 'file_upload', 'group', 'keyword_list']
 
