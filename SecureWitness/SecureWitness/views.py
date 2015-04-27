@@ -58,6 +58,8 @@ def welcome(request):
     return render(request, 'SecureWitness/Welcome.html', context)
 
 
+@login_required(redirect_field_name='Login', login_url='/Login/')
+@user_passes_test(is_active_check, redirect_field_name='Login', login_url='/Login/')
 def profile(request):
     if request.method == 'POST':
         pass    
