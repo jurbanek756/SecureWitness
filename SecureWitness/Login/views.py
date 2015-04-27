@@ -1,4 +1,4 @@
-
+import datetime
 from django.shortcuts import render_to_response, render
 from django.http import HttpResponseRedirect
 from django.template import loader, RequestContext
@@ -243,8 +243,8 @@ def report(request):
 
             user=request.user.username
             group= Group.objects.get(pk=form['group'].value())
-
-            form = Report.objects.create_report(form['report_title'].value(), user, form['pub_date'].value(), form['incident_date'].value(), form['report_text_short'].value(), form['file_upload'].value(), form['report_text_long'].value(), form['location'].value(), form['private'].value(), group, form['key'].value(), form['keyword_list'].value())
+            
+            form = Report.objects.create_report(form['report_title'].value(), user, datetime.datetime.now(), form['incident_date'].value(), form['report_text_short'].value(), form['file_upload_1'].value(),form['file_upload_2'].value(), form['file_upload_3'].value(), form['file_upload_4'].value(), form['report_text_long'].value(), form['location'].value(), form['private'].value(), group, form['key'].value(), form['keyword_list'].value())
             form.save()
             #print(form.file_upload.name)
             #with open(form.file_upload, 'rb') as infile:
