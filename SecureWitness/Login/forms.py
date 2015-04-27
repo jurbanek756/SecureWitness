@@ -57,7 +57,7 @@ class ReportForm(ModelForm):
 
         fields = ['report_title', 'report_text_short',
                   'report_text_long', 'location', 'incident_date',
-                  'private', 'file_upload', 'group', 'key', 'keyword_list']
+                  'private', 'file_upload_1', 'file_upload_2', 'file_upload_3', 'file_upload_4', 'group', 'key', 'keyword_list']
 
 
         widgets = {

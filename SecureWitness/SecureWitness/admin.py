@@ -15,7 +15,7 @@ class ReportAdmin(admin.ModelAdmin):
         (None,               {'fields': ['private']}),
         (None,               {'fields': ['group']}),
         (None,               {'fields': ['author']}),
-        (None,               {'fields': ['file_upload']})
+        (None,               {'fields': ['file_upload_1', 'file_upload_2', 'file_upload_3', 'file_upload_4']})
     ]
 """
 class Custom_GroupAdmin(admin.ModelAdmin):
