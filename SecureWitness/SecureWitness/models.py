@@ -46,7 +46,7 @@ class Report(models.Model):
     report_text_long = models.CharField(max_length=200, unique=True)
     location = models.CharField(max_length=100)
     incident_date = models.DateField('Incident Date (YYYY-MM-DD)')
-    file_upload = models.FileField(null=True)
+    file_upload = models.FileField(null=True, blank = True)
     objects = ReportManager()
     keyword_list = models.CharField(max_length=50, null=True)
     private = models.BooleanField(default=False)

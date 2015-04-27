@@ -9,6 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+import datetime
 import SecureWitness
 
 
@@ -175,7 +176,44 @@ def register(request):
     else:
         form = RegisterForm()
     return render(request, 'Register/index.html', {'form':form})
-# Create your views here.
+
+@login_required(redirect_field_name='Login', login_url='/Login/')
+def edit_view(request, report_id):
+    report = Report.objects.get(pk=report_id)
+    if request.method== 'POST':
+        form = ReportForm(request.POST, request.FILES, instance = report)
+        if form.is_valid():
+            if 'Submit' in request.POST:
+                report.report_title = form['report_title'].value()
+                report.incident_date = form['incident_date'].value()
+                report.report_text_short = form['report_text_short'].value()
+                report.file_upload = form['file_upload'].value()
+                report.report_text_long = form['report_text_long'].value()
+                report.location = form['location'].value()
+                report.private = form['private'].value()
+                report.keyword_list = form['keyword_list'].value()
+                report.save()
+                return HttpResponseRedirect('/Welcome/')
+
+    else:
+        form = ReportForm(instance = report )
+    return render(request, 'SecureWitness/edit.html', {"report":report, "form": form})
+
+def yourReports(request):
+    user = request.user
+    reports = Report.objects.filter(author = user.username)
+    return render(request, 'SecureWitness/reports.html',{"reports":reports} )
+
+@login_required(redirect_field_name='Login', login_url='/Login/')
+def delYourReportView(request):
+    user = request.user
+    reports = Report.objects.filter(author = user.username)
+    if 'Delete' in request.POST:
+        report = Report.objects.get(pk=request.POST['report'])
+        report.delete()
+        return HttpResponseRedirect('/Welcome/')
+
+    return render(request, 'SecureWitness/user_delete_reports.html', {"reports": reports, "user":user})
 
 @login_required(redirect_field_name='Login', login_url='/Login/')
 @permission_required('SecureWitness.add_report')
@@ -186,7 +224,7 @@ def report(request):
             user=request.user.username
             group= Group.objects.get(pk=form['group'].value())
 
-            form = Report.objects.create_report(form['report_title'].value(), user, form['pub_date'].value(), form['incident_date'].value(), form['report_text_short'].value(), form['file_upload'].value(), form['report_text_long'].value(), form['location'].value(), form['private'].value(), group, form['keyword_list'].value())
+            form = Report.objects.create_report(form['report_title'].value(), user, datetime.datetime.now(), form['incident_date'].value(), form['report_text_short'].value(), form['file_upload'].value(), form['report_text_long'].value(), form['location'].value(), form['private'].value(), group, form['keyword_list'].value())
             form.save()
             return HttpResponseRedirect('/Welcome/')
     else:

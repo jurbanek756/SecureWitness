@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Delete Reports</title>
+</head>
+<body>
+Delete reports
+<form method="post">
+		{% csrf_token %}
+
+
+{% for report in reports %}
+
+            <p><input type="radio" name="report" id="{{ forloop.counter }}" value="{{ report.id }}" />
+    <label for="report{{ forloop.counter }}">{{ report.report_title }}</label><br />
+            </p>
+
+        {% endfor %}
+    <p><input type="submit" name="Delete" value="Delete" /></p>
+</body>
+</html>
