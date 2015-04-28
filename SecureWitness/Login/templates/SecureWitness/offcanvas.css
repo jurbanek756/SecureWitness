@@ -8,6 +8,7 @@ body {
 }
 body {
   padding-top: 70px;
+  padding-bottom: 20px;
 }
 footer {
   padding: 30px 0;
@@ -54,6 +55,8 @@ footer {
   .sidebar-offcanvas {
     position: absolute;
       float: left;
+        padding-top: 50px;
+  padding-bottom: 20px;
     top: 0;
     width: 30%; /* 6 columns */
   }

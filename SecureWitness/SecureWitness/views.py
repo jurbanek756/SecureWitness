@@ -27,8 +27,8 @@ def welcome(request):
          logout(request)
          return HttpResponseRedirect('/Login/')
       elif 'Search' in request.POST:
-        form = SearchForm(request.POST)
-        if form.is_valid():
+        search_form = SearchForm(request.POST)
+        if search_form.is_valid():
           keywords = request.POST['search'].split()
           ans = []
           ans.append([])
@@ -71,6 +71,7 @@ def profile(request):
         pass    
     else:
         user = request.user
+        search_form = SearchForm()
         reports = Report.objects.filter(author = user.username)
-    context = {'reports':reports, 'user':user}
+    context = {'reports':reports, 'user':user,'search_form':search_form}
     return render(request, 'SecureWitness/profile.html', context)

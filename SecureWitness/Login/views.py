@@ -217,8 +217,10 @@ def ban_users(request):
                 user.save()
                 return HttpResponseRedirect('/AdminInterface/')
     else:
+        search_form = SearchForm()
+
         form =BanUsersForm()
-    return render(request, 'SecureWitness/ban_users.html',{"form": form})
+    return render(request, 'SecureWitness/ban_users.html',{"form": form,'search_form':search_form})
 
 @login_required(redirect_field_name='Login', login_url='/Login/')
 def make_admins(request):
@@ -232,8 +234,9 @@ def make_admins(request):
                 user.save()
                 return HttpResponseRedirect('/AdminInterface/')
     else:
+        search_form = SearchForm()
         form = MakeAdminsForm()
-    return render(request, 'SecureWitness/make_admins.html', {"form": form})
+    return render(request, 'SecureWitness/make_admins.html', {"form": form,'search_form':search_form})
 
 
 @login_required(redirect_field_name='Login', login_url='/Login/')
@@ -281,8 +284,9 @@ def index(request):
             else:
                 print("Invalid login")
     else:
+        search_form = SearchForm()
         form = LoginForm()
-    return render(request,'Login/index.html', {'form':form})
+    return render(request,'Login/index.html', {'form':form,'search_form':search_form})
 
 
 def register(request):
@@ -330,8 +334,10 @@ def edit_view(request, report_id):
                 return HttpResponseRedirect('/Welcome/')
 
     else:
+        search_form = SearchForm()
+
         form = ReportForm(instance = report )
-    return render(request, 'SecureWitness/edit.html', {"report":report, "form": form})
+    return render(request, 'SecureWitness/edit.html', {"report":report, "form": form,'search_form':search_form})
 
 def yourReports(request):
     user = request.user
@@ -358,6 +364,7 @@ def report(request):
 
             user=request.user.username
             group= Group.objects.get(pk=form['group'].value())
+            search_form = SearchForm(request.POST)
             form = Report.objects.create_report(form['report_title'].value(), user, datetime.datetime.now(), form['incident_date'].value(), form['report_text_short'].value(), form['file_upload_1'].value(),form['file_upload_2'].value(), form['file_upload_3'].value(), form['file_upload_4'].value(), form['report_text_long'].value(), form['location'].value(), form['private'].value(), group, form['key'].value(), form['keyword_list'].value())
             form.save()
             #print(form.file_upload.name)
@@ -368,5 +375,6 @@ def report(request):
 
             return HttpResponseRedirect('/Welcome/')
     else:
+        search_form = SearchForm()
         form = ReportForm()
-    return render(request, 'Report/report.html', {'form':form})
+    return render(request, 'Report/report.html', {'form':form,'search_form':search_form})
