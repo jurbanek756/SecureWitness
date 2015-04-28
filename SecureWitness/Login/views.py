@@ -3,8 +3,8 @@ from django.shortcuts import render_to_response, render
 from django.http import HttpResponseRedirect
 from django.template import loader, RequestContext
 from django.core.context_processors import csrf
-from .forms import LoginForm, RegisterForm, ReportForm, GroupForm, MakeAdminsForm, BanUsersForm, AddToGroupForm, UserAddToGroupForm, DeleteReportForm, SearchForm
-from SecureWitness.models import Report
+from .forms import LoginForm, RegisterForm, ReportForm, GroupForm, MakeAdminsForm, ShareFolderForm, BanUsersForm, CreateFolderForm, AddToGroupForm, UserAddToGroupForm, DeleteReportForm, SearchForm
+from SecureWitness.models import Report, Folder
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate, login, logout
@@ -49,6 +49,15 @@ def yourReports(request):
     reports = Report.objects.filter(author = user.username)
     return render(request, 'SecureWitness/reports.html',{"reports":reports} )
 
+def aProfile(request, user_id):
+    user = User.objects.get(pk=user_id)
+    reports = Report.objects.filter(author = user)
+    return render(request, 'SecureWitness/aProfile.html', {"reports":reports, "user":user})
+
+def showReport(request, report_id):
+    report = Report.objects.get(pk=report_id)
+    return render(request, 'SecureWitness/aReport.html', {"report:":report})
+
 @login_required(redirect_field_name='Login', login_url='/Login/')
 def edit_view(request, report_id):
     report = Report.objects.get(pk=report_id)
@@ -75,6 +84,72 @@ def edit_view(request, report_id):
 def directory(request):
     user_list = User.objects.all()
     return render(request,'SecureWitness/directory.html', {"user_list":user_list} )
+
+
+def createFolder(request):
+    groups = Group.objects.all()
+    reports = Report.objects.filter(author = request.user.username)
+    if request.method == 'POST':
+        form = CreateFolderForm(request.POST)
+        if 'Create' in request.POST:
+            name = request.POST['name']
+            report = Report.objects.get(pk=request.POST['report'])
+            group = Group.objects.get(pk=request.POST['group'])
+            folder = Folder.objects.create_folder(name, group, report, request.user)
+            folder.save()
+            group.report_set.add(report)
+            group.save()
+            return HttpResponseRedirect('/Welcome/')
+    else:
+        form = CreateFolderForm()
+
+    return render(request, 'SecureWitness/createFolder.html', {"form":form, "groups":groups, "reports": reports})
+
+
+def deleteFolder(request):
+    folders = Folder.objects.filter(owner=request.user)
+    if request.method == 'POST':
+        if 'Delete' in request.POST:
+            folder = Folder.objects.get(pk=request.POST['folder'])
+            folder.delete()
+    return render(request, 'SecureWitness/deleteFolder.html', {"folders":folders})
+
+def addToFolder(request):
+    folders = Folder.objects.filter(owner=request.user)
+    reports = Report.objects.filter(author= request.user)
+    if request.method == 'POST':
+        if 'Add Report' in request.POST:
+            folder = Folder.objects.get(pk=request.POST['folder'])
+            report = Report.objects.get(pk= request.POST['report'])
+            report.folder_set.add(folder)
+            report.save()
+            folder.save()
+            return HttpResponseRedirect('/Welcome/')
+
+
+    return render(request, 'SecureWitness/addToFolder.html', {"folders":folders, "reports":reports})
+
+
+
+def shareFolder(request):
+    folders = Folder.objects.filter(name = '')
+    for gr in request.user.groups.all():
+        newList= Folder.objects.filter(groups__name = gr.name)
+        folders = folders | newList
+    if request.method == 'POST':
+        form = ShareFolderForm(request.POST)
+        if 'Share' in request.POST:
+            group = Group.objects.get(pk=request.POST['group'])
+            folder = Folder.objects.get(pk=request.POST['folder'])
+            group.folder_set.add(folder)
+#            for report in Folder.objects.filter(groups=group):
+#                group.folder_set.add(report)
+#                group.save()
+            group.save()
+            return HttpResponseRedirect('/Welcome/')
+    else:
+        form = ShareFolderForm()
+    return render(request, 'SecureWitness/shareFolder.html',{"form": form, "folders":folders})
 
 @login_required(redirect_field_name='Login', login_url='/Login/')
 def admin_interface(request):

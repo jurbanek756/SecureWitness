@@ -99,16 +99,18 @@
                                 <th>Published</th>
                                 <th>Location</th>
                                 <th>Short Description</th>
+                                <th>Author</th>
                             </tr>
                             </thead>
                             <tbody>
                                 {% for report in latest_report_list %}
 
                             <tr>
-                                    <td>{{ report.report_title }}</td>
+                                    <td><a href="/{{ report.id }}/report/" >{{ report.report_title }}</a></li></td>
                                     <td>{{ report.pub_date }}</td>
                                     <td>{{ report.location }}</td>
                                     <td>{{ report.report_text_short }}</td>
+                                    <td><a href="/{{ user.id }}/profile/" >{{ report.author }}</a></li></td>
                                     </tr>
                                     </tbody>{% endfor %}
                                     </table>

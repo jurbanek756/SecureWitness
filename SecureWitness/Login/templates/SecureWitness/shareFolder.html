@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Share Folder</title>
+</head>
+<body>
+<form method="post">
+{% csrf_token %}
+    {{ form.as_p }}
+    <p>Folders:</p>
+    {% if not folders %}
+                    <p>No Folders To Show</p>
+                {% endif %}
+    {% for folder in folders %}
+
+            <p><input type="radio" name="folder" id="{{ forloop.counter }}" value="{{ folder.id }}", required />
+                <label for="folder{{ forloop.counter }}">{{ folder.name }}</label><br />
+            </p>
+
+        {% endfor %}
+<p><input type="submit" name="Share" value="Share" /></p>
+</form>
+</body>
+</html>

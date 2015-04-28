@@ -1,5 +1,5 @@
 from django.contrib import admin
-from SecureWitness.models import CustomUser, Report, Folder #Custom_Group
+from SecureWitness.models import Report, Folder
 from django.forms import Textarea
 from django.db import models
 
@@ -17,21 +17,16 @@ class ReportAdmin(admin.ModelAdmin):
         (None,               {'fields': ['author']}),
         (None,               {'fields': ['file_upload_1', 'file_upload_2', 'file_upload_3', 'file_upload_4']})
     ]
-"""
-class Custom_GroupAdmin(admin.ModelAdmin):
-    fieldsets = [
-        (None,               {'fields': ['group_name']})
-        (None,               {'fields': ['mem_list']})
-    ]
-"""
+
 class FolderAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,               {'fields': ['name']}),
+        (None,               {'fields': ['owner']}),
         (None,               {'fields': ['groups']}),
         (None,               {'fields': ['reports']}),
 
     ]
 
 
-
+admin.site.register(Folder, FolderAdmin)
 admin.site.register(Report, ReportAdmin)

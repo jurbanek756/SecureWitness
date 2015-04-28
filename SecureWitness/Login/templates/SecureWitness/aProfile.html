@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{{user.username}}'s page</title>
+</head>
+<body>
+<p>This is the page of {{user.username}}</p>
+<p>Their name is {{user.first_name}} {{user.last_name}}</p>
+<p>Their email is {{user.email}}</p>
+<p>Here is a sample of their reports</p>
+{% for report in reports %}
+
+<a href="/{{ report.id }}/report/" >{{ report.report_title }}</a></li>
+{{ report.pub_date }}
+{{ report.location }}
+{{ report.report_text_short }}
+{% endfor %}
+
+</body>
+</html>
