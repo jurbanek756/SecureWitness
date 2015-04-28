@@ -126,6 +126,6 @@ STATIC_ROOT = 'staticfiles'
 DEBUG = True
 
 try:
-    from SecureWitness.local_settings import *
+    from .local_settings import *
 except ImportError:
     pass
