@@ -1,6 +1,7 @@
 myvenv
 __pycache__
 staticfiles
+SecureWitness/local_settings.py
 local_settings.py
 SecureWitness/db.sqlite3
 *.py[co]

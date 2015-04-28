@@ -45,7 +45,7 @@ class Report(models.Model):
     pub_date = models.DateField('Date Pulished (YYYY-MM-DD)')
     report_text_long = models.CharField(max_length=200, unique=True)
     location = models.CharField(max_length=100)
-    file_upload_1 = models.FileField(null= True, blank= True)
+    file_upload_1 = models.FileField(null=True, blank= True)
     file_upload_2 = models.FileField(null=True, blank= True)
     file_upload_3 = models.FileField(null=True, blank= True)
     file_upload_4 = models.FileField(null=True, blank= True)

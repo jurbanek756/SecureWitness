@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import dj_database_url
+
 
 '''
 Things to Change Back:
@@ -126,6 +126,6 @@ STATIC_ROOT = 'staticfiles'
 DEBUG = True
 
 try:
-    from SecureWitness.local_settings import *
+    from .local_settings import *
 except ImportError:
     pass

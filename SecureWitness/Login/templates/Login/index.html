@@ -3,37 +3,53 @@
 
 <head>
 
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Login</title>
+    <link rel="stylesheet" href="../../../bootstrap-3.3.4-dist/css/bootstrap.min.css" ./>{% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="../../static/Login/signin.css"/>
+    <link rel="icon" href="../../../SecureWitness/favicon.ico"/>
 
-  <title>Login</title>
 
-  <link rel='stylesheet' href='http://codepen.io/assets/libs/fullpage/jquery-ui.css'>
-    {% load staticfiles %}
-    <link rel="stylesheet" type "text/css" href="{% static 'Login/style.css' %}"/>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
 
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
-        <font color="red">
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        </font>
+    <font color="red">
+        <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    </font>
     {% endfor %}
 </ul>
 {% endif %}
 
 <body>
 
-  <div class="login-card">
-    <h1>Login</h1><br>
-		<form method="post">
-		{% csrf_token %}
-		{{ form.as_p }}
-	
-		<input type="submit" name="Login" value="Login" />
-		<input type="submit" name="Register" value="Register" />
-</form>
+<div class="login-card">
+    <div class="row-fluid">
+
+        <form method="post" class="form-signin">
+            <h2 align="centered" class="form-signin-heading">SecureWitness</h2><br>
+
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <input type="submit" class="btn btn-primary" name="Login" value="Login"/>
+            <input type="submit" class="btn btn-primary" name="Register" value="Register"/>
+        </form>
+    </div>
 
 </div>
 

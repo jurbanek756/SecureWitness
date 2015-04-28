@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link type="text/css" href="offcanvas.css"/>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -19,7 +20,8 @@
     <![endif]-->
 
     <!-- Custom styles for this template -->
-    <link href="carousel.css" rel="stylesheet">
+    <link href="carousel.css" type="text/css" rel="stylesheet"/>
+    <link type="text/css" href="nav.css" rel="stylesheet"/>
 </head>
 
 
@@ -27,7 +29,7 @@
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
 
-    <div id="navigation_bar" class="row">
+    <div id="navigation_bar" class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
                     aria-expanded="false" aria-controls="navbar">
@@ -53,34 +55,53 @@
                         <li><a href="../groups/">Invite others..</a></li>
                     </ul>
                 </li>
+                <li>
                 <form method="post">
                   {% csrf_token %}
                   {{ form }}
                   <button type="submit" class="btn btn-primary" name="Search" value="Search">Search</button> 
                 </form>
+                </li>
             </ul>
         </div>
         <!--/.nav-collapse -->
     </div>
 </nav>
 
-
-
-
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar container-fluid">
+          <ul class="nav nav-sidebar"><br><br><br>
+            <li>Reports</li>
+              <li><a href="YourReports/">View</a></li>
+            <li><a href="#">Edit</a></li>
+            <li><a href="Delete_Your_Report/">Delete</a></li>
+          </ul><br>
+          <ul class="nav nav-sidebar">
+              <li>Folders</li>
+            <li><a href="Create_Folder/">Create</a></li>
+            <li><a href="">Edit</a></li>
+              <li><a href="Share_Folder/">Share</a></li>
+            <li><a href="Delete_Folder/">Delete</a></li>
+            <br>
+          </ul>
+          <ul class="nav nav-sidebar">
+              <li>Groups</li>
+            <li><a href="Create_Groups/">Create Group</a></li>
+            <li><a href="Add_User_To_Group">Add User to group</a></li>
+            <li><a href="">Edit</a></li>
+          </ul>
+            <ul class="nav nav-sidebar">
+                {% if user.is_staff %}
+                <li>Admin-Access-Only</li>
+                <li><a href="/AdminInterface/">Admin Interface</a></li>
+                {% endif %}
+            </ul>
+        </div>
 <div class="container">
     <div class="container theme-showcase" role="main">
         <div class="jumbotron">
-            <h1><p>Welcome {{ user.username }}!</p></h1>
-            <p class="lead">Now using bootstrap!<br>
-                <a href="/AdminInterface/">Admin Interface</a>
-            </p>
-            <p><a href="Add_User_To_Group/">Add another user to one of your groups</a></li> </p>
-          <p><a href="Delete_Your_Report/">Delete one of your Reports</a></li> </p>
-          <p><a href="YourReports/">Look at the reports you've uploaded personally</a></li> </p>
-            <p><a href="Create_Folder/">Make a Folder</a></li> </p>
-            <p><a href="Share_Folder/">Share a Folder</a></li> </p>
-            <p><a href="Add_to_Folder/">Add Reports to a Folder</a></li> </p>
-            <p><a href="Delete_Folder/">Delete a Folder</a></li> </p>
+            <h1><p>Welcome {{ user.username }}!</p></h1><br>
             <h1><p>Reports:</p></h1>
 
             <form method="post">
