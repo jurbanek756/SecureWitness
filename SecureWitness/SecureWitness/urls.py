@@ -32,6 +32,7 @@ urlpatterns = patterns('',
     url(r'^Login/', include('Login.urls')),
     url(r'^Register/', 'Login.views.register', name='register'),
     url(r'^report/', 'Login.views.report', name='report'),
+    url(r'^search/$', views.search, name='AdvSearch'),
 )
 
 

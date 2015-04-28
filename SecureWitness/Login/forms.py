@@ -13,6 +13,11 @@ class GroupForm(forms.Form):
 class SearchForm(forms.Form):
     search = forms.CharField(label='Search', required=True)
 
+class AdvSearchForm(forms.Form):
+    title = forms.CharField(label='Title', required=False)
+    author = forms.CharField(label='Author', required=False)
+    loc = forms.CharField(label='Location', required=False)
+    year = forms.IntegerField(label='Year', required=False, min_value=1990, max_value=2015)
 
 class DeleteReportForm(forms.Form):
     report = forms.ModelChoiceField(queryset=Report.objects.all(), label='Report', required=True)
@@ -38,7 +43,6 @@ class MakeAdminsForm(forms.Form):
 class LoginForm(forms.Form):
     user = forms.CharField(label='Username', required=True)
     usrpass = forms.CharField(label='Password', widget=forms.PasswordInput, required=True)
-
 
 class RegisterForm(forms.Form):
     first = forms.CharField(label='First')

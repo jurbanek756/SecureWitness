@@ -64,11 +64,35 @@
 <div class="container theme-showcase">
     <div class="row" >
         <div class="jumbotron">
-            <h1>Create a Report</h1>
+            <h1>Advanced Search</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-success" name="this">Submit</button>
+            {% if latest_report_list %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Report Name</th>
+                                <th>Published</th>
+                                <th>Location</th>
+                                <th>Short Description</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for report in latest_report_list %}
+
+                            <tr>
+                                    <td>{{ report.report_title }}</td>
+                                    <td>{{ report.pub_date }}</td>
+                                    <td>{{ report.location }}</td>
+                                    <td>{{ report.report_text_short }}</td>
+                                    </tr>
+                                    </tbody>{% endfor %}
+                                    </table>
+                                    </div>
+            {% endif %}
     </form>
         </div>
     </div>
