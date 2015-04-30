@@ -56,7 +56,7 @@ def aProfile(request, user_id):
 
 def showReport(request, report_id):
     report = Report.objects.get(pk=report_id)
-    return render(request, 'SecureWitness/aReport.html', {"report:":report})
+    return render(request, 'SecureWitness/aReport.html', {"report":report})
 
 @login_required(redirect_field_name='Login', login_url='/Login/')
 def edit_view(request, report_id):
