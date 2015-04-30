@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Add Reports to folder</title>
+</head>
+<body>
+{% csrf_token %}
+    {{ form.as_p }}
+    <p>Reports:</p>
+    {% if not reports %}
+                    <p>No Reports To Show</p>
+                {% endif %}
+    {% for report in reports %}
+
+            <p><input type="radio" name="report" id="{{ forloop.counter }}" value="{{ report.id }}", required />
+    <label for="report{{ forloop.counter }}">{{ report.report_title }}</label><br />
+            </p>
+
+        {% endfor %}
+    <p>Folders:</p>
+    {% if not folders %}
+                    <p>No Folders To Show</p>
+                {% endif %}
+    {% for folder in folders %}
+
+            <p><input type="radio" name="folder" id="{{ forloop.counter }}" value="{{ folder.id }}", required />
+    <label for="Folder{{ forloop.counter }}">{{ folder.name }}</label><br />
+            </p>
+
+        {% endfor %}
+        <input type="submit" name="Create" value="Create" />
+
+</body>
+</html>

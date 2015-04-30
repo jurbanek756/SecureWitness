@@ -6,6 +6,13 @@ from django.forms import ModelForm, Textarea
 from django.contrib.admin.widgets import AdminDateWidget
 
 
+
+class ShareFolderForm(forms.Form):
+    group = forms.ModelChoiceField(queryset=Group.objects.all(), label='Group Name', required = 'True')
+
+class CreateFolderForm(forms.Form):
+    name = forms.CharField(label="Folder Name", required='True')
+
 class GroupForm(forms.Form):
     group = forms.CharField(label='Group Name', required='True')
 

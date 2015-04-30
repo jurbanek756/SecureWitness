@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{{report.report_title}}</title>
+</head>
+<body>
+{% csrf_token %}
+<p>Title: {{report.report_title}} </p>
+
+   <p>Published: {{report.pub_date}}  </p>
+    <p>Report Text: {{report.report_text_long}} </p>
+    <p>Location: {{report.location}} </p>
+    <p>Incident Date: {{report.incident_date}}</p>
+    <p>Keywords: {{report.keyword_list}} </p>
+
+    <p>Groups: {{report.group}} </p>
+    <p>Author: <a href="/{{ user.id }}/profile/" >{{ report.author }}</a></li></p>
+</body>
+</html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Delete Report</title>
+    <title>{{user.username}}'s Profile: SecureWitness</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <!-- Optional theme -->
@@ -79,38 +79,62 @@
         </div>
 
         <div class="container"><br><br><br>
-            <!##############>
-            <!MAIN CONTAINER>
-            <!##############>
-
-            <p>Reports:</p>
-
-            <form method="post">
-                {% csrf_token %}
-                {% if not reports %}
-                <h>No Reports To Show</h>
-                {% endif %}
-
-                {% for report in reports %}
-
-                <p><input type="radio" name="report" id="{{ forloop.counter }}" value="{{ report.id }}"/>
-                    <label for="report{{ forloop.counter }}">{{ report.report_title }}</label><br/>
-                </p>
-
-                {% endfor %}
-                <p><input type="submit" class="btn btn-primary" name="Delete" value="Delete"/></p>
-
-            </form>
+        <!##############>
+        <!MAIN CONTAINER>
+        <!##############>
 
 
-            <!END>
-            <!##############>
-            <!MAIN CONTAINER>
-            <!##############>
-        </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        {% if not latest_report_list %}
+                        <h>No Reports To Show</h>
+                        {% endif %}
+                        {% if user.is_authenticated %}
+
+
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Report Name</th>
+                                    <th>Published</th>
+                                    <th>Location</th>
+                                    <th>Short Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for report in latest_report_list %}
+
+                                <tr>
+                                    <td>{{ report.report_title }}</td>
+                                    <td>{{ report.pub_date }}</td>
+                                    <td>{{ report.location }}</td>
+                                    <td>{{ report.report_text_short }}</td>
+                                </tr>
+                                </tbody>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        <p>
+                            {% if perms.SecureWitness.add_report %}
+                            <button type="submit" class="btn btn-primary" name="report">Create Report</button>
+                            {% endif %}
+                            <button type="submit" class="btn btn-primary" name="logout">Logout</button>
+                        </p>
+                        {% endif %}
+
+                    </form>
+
+        <!END>
+        <!##############>
+        <!MAIN CONTAINER>
+        <!##############>
+    </div>
 
     </div>
 </div>
+
+
 </body>
 <!-- Bootstrap core JavaScript
 ================================================== -->

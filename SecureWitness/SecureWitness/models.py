@@ -61,14 +61,17 @@ class Report(models.Model):
         return string
 
 class FolderManager(models.Manager):
-    def create_report(self, name, groups, reports):
-        folder = self.create(name= name, groups = groups, reports = reports)
+    def create_folder(self, name, groups, reports, owner):
+        folder = self.create(name= name, groups = groups, reports = reports, owner = owner)
         return folder
 
 
 class Folder(models.Model):
     name = models.CharField(max_length=50)
+    owner = models.OneToOneField(User, default=None, blank=True)
     groups = models.ForeignKey(Group, blank= True)
     reports = models.ForeignKey(Report, blank= True)
     objects = FolderManager()
+    def __str__(self):
+        return self.name
 
