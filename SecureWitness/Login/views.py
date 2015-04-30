@@ -206,6 +206,7 @@ def create_group(request):
 
 @login_required(redirect_field_name='Login', login_url='/Login/')
 def ban_users(request):
+    search_form = SearchForm()
     if request.method == 'POST':
         form=BanUsersForm(request.POST)
         if form.is_valid():
@@ -217,13 +218,13 @@ def ban_users(request):
                 user.save()
                 return HttpResponseRedirect('/AdminInterface/')
     else:
-        search_form = SearchForm()
 
         form =BanUsersForm()
     return render(request, 'SecureWitness/ban_users.html',{"form": form,'search_form':search_form})
 
 @login_required(redirect_field_name='Login', login_url='/Login/')
 def make_admins(request):
+    search_form = SearchForm()
     if request.method == 'POST':
         form=MakeAdminsForm(request.POST)
         if form.is_valid():
@@ -234,13 +235,13 @@ def make_admins(request):
                 user.save()
                 return HttpResponseRedirect('/AdminInterface/')
     else:
-        search_form = SearchForm()
         form = MakeAdminsForm()
     return render(request, 'SecureWitness/make_admins.html', {"form": form,'search_form':search_form})
 
 
 @login_required(redirect_field_name='Login', login_url='/Login/')
 def delReportView(request):
+    search_form = SearchForm()
     if request.method == 'POST':
         form=DeleteReportForm(request.POST)
         if form.is_valid():
@@ -251,11 +252,12 @@ def delReportView(request):
                 return HttpResponseRedirect('/AdminInterface/')
     else:
         form =DeleteReportForm()
-    return render(request, 'SecureWitness/delete_reports.html',{"form": form})
+    return render(request, 'SecureWitness/delete_reports.html',{"form": form,'search_form':search_form})
 
 
 @login_required(redirect_field_name='Login', login_url='/Login/')
 def delYourReportView(request):
+    search_form = SearchForm()
     user = request.user
     reports = Report.objects.filter(author = user.username)
     if 'Delete' in request.POST:
@@ -263,10 +265,11 @@ def delYourReportView(request):
         report.delete()
         return HttpResponseRedirect('/Welcome/')
 
-    return render(request, 'SecureWitness/user_delete_reports.html', {"reports": reports, "user":user})
+    return render(request, 'SecureWitness/user_delete_reports.html', {"reports": reports, "user":user,'search_form':search_form})
 
 
 def index(request):
+    search_form = SearchForm()
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if 'Register' in request.POST:
@@ -284,12 +287,12 @@ def index(request):
             else:
                 print("Invalid login")
     else:
-        search_form = SearchForm()
         form = LoginForm()
     return render(request,'Login/index.html', {'form':form,'search_form':search_form})
 
 
 def register(request):
+    search_form = SearchForm()
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -313,11 +316,12 @@ def register(request):
                 return HttpResponseRedirect('/Login/')
     else:
         form = RegisterForm()
-    return render(request, 'Register/index.html', {'form':form})
+    return render(request, 'Register/index.html', {'form':form,'search_form':search_form})
 
 @login_required(redirect_field_name='Login', login_url='/Login/')
 def edit_view(request, report_id):
     report = Report.objects.get(pk=report_id)
+    search_form = SearchForm()
     if request.method== 'POST':
         form = ReportForm(request.POST, request.FILES, instance = report)
         if form.is_valid():
@@ -334,7 +338,6 @@ def edit_view(request, report_id):
                 return HttpResponseRedirect('/Welcome/')
 
     else:
-        search_form = SearchForm()
 
         form = ReportForm(instance = report )
     return render(request, 'SecureWitness/edit.html', {"report":report, "form": form,'search_form':search_form})
@@ -358,6 +361,7 @@ def delYourReportView(request):
 @login_required(redirect_field_name='Login', login_url='/Login/')
 @permission_required('SecureWitness.add_report')
 def report(request):
+    search_form = SearchForm()
     if request.method == 'POST':
         form = ReportForm(request.POST, request.FILES)
         if form.is_valid() and request.user.is_authenticated():
@@ -375,6 +379,5 @@ def report(request):
 
             return HttpResponseRedirect('/Welcome/')
     else:
-        search_form = SearchForm()
         form = ReportForm()
     return render(request, 'Report/report.html', {'form':form,'search_form':search_form})
