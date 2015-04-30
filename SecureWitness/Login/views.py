@@ -329,7 +329,11 @@ def edit_view(request, report_id):
                 report.report_title = form['report_title'].value()
                 report.incident_date = form['incident_date'].value()
                 report.report_text_short = form['report_text_short'].value()
-                report.file_upload = form['file_upload'].value()
+                report.file_upload_1 = form['file_upload_1'].value()
+                report.file_upload_2 = form['file_upload_2'].value()
+                report.file_upload_3 = form['file_upload_3'].value()
+                report.file_upload_4 = form['file_upload_4'].value()
+
                 report.report_text_long = form['report_text_long'].value()
                 report.location = form['location'].value()
                 report.private = form['private'].value()
