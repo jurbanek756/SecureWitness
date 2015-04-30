@@ -89,8 +89,8 @@
 
             <form method="post">
                 {% csrf_token %}
-                {% if not latest_report_list %}
-                <h>No Reports To Show</h>
+                {% if not reports %}
+                    <h>No Reports To Show</h>
                 {% endif %}
                 {% if user.is_authenticated %}
 
@@ -109,8 +109,8 @@
                         <tbody>
                         {% for report in reports %}
                         <tr>
-                            <td>{{ report.id}}</td>
-                            <td>{{ report.report_title }}</td>
+                            <td>{{ report.id }}</td>
+                            <td><a href="/{{ report.id }}/edit" >{{ report.report_title }}</a></td>
                             <td>{{ report.pub_date }}</td>
                             <td>{{ report.location }}</td>
                             <td>{{ report.report_text_short }}</td>
