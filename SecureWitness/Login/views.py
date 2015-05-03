@@ -368,6 +368,7 @@ def report(request):
     search_form = SearchForm()
     if request.method == 'POST':
         form = ReportForm(request.POST, request.FILES)
+        encrypt_form = form
         if form.is_valid() and request.user.is_authenticated():
 
             user=request.user.username
@@ -375,12 +376,28 @@ def report(request):
             search_form = SearchForm(request.POST)
             form = Report.objects.create_report(form['report_title'].value(), user, datetime.datetime.now(), form['incident_date'].value(), form['report_text_short'].value(), form['file_upload_1'].value(),form['file_upload_2'].value(), form['file_upload_3'].value(), form['file_upload_4'].value(), form['report_text_long'].value(), form['location'].value(), form['private'].value(), group, form['key'].value(), form['keyword_list'].value())
             form.save()
-            #print(form.file_upload.name)
+            print(form.file_upload_1)
             #with open(form.file_upload, 'rb') as infile:
             #    infile.read(32)
-            if form.private is True and form.key is not None:
-                crypt.encrypt_file(crypt.getKey(form.key), form.file_upload)
+            if form.private is True and form.key is not None and form.file_upload_1.name is not None:
 
+                file1 = crypt.encrypt_file(crypt.getKey(form.key), form.file_upload_1)
+                print(file1)
+                if form.file_upload_2.name is not None:
+                    file2 = crypt.encrypt_file(crypt.getKey(form.key), form.file_upload_2)
+                else:
+                    file2 = form.file_upload_2
+                if form.file_upload_3.name is not None:
+                    file3 = crypt.encrypt_file(crypt.getKey(form.key), form.file_upload_3)
+                else:
+                    file3 = form.file_upload_3
+                if form.file_upload_4.name is not None:
+                    file4 = crypt.encrypt_file(crypt.getKey(form.key), form.file_upload_4)
+                else:
+                    file4 = form.file_upload_4
+                form.delete()
+                encrypt_form = Report.objects.create_report(encrypt_form['report_title'].value(), user, datetime.datetime.now(), encrypt_form['incident_date'].value(), encrypt_form['report_text_short'].value(), file1, file2, file3, file4, encrypt_form['report_text_long'].value(), encrypt_form['location'].value(), encrypt_form['private'].value(), group, encrypt_form['key'].value(), encrypt_form['keyword_list'].value())
+                encrypt_form.save()
             return HttpResponseRedirect('/Welcome/')
     else:
         form = ReportForm()

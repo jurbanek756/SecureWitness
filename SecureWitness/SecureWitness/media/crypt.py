@@ -30,6 +30,9 @@ def encrypt_file(key, in_filename, out_filename=None, chunksize=64*1024):
                     chunk +=foo
 
                 outfile.write(encryptor.encrypt(chunk))
+    os.remove(in_filename)
+
+    return out_filename
 
     # with open(out_filename,'rb') as decfile:
     #     origsize = struct.unpack('<Q', decfile.read(struct.calcsize('Q')))[0]
